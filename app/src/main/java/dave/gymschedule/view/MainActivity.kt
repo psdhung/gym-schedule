@@ -10,6 +10,7 @@ import android.view.View
 import dave.gymschedule.BaseActivity
 import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.PoolExpandableListAdapter
 import dave.gymschedule.R
 import dave.gymschedule.interactor.GymScheduleInteractorImpl
 import dave.gymschedule.presenter.GymSchedulePresenter
@@ -23,8 +24,7 @@ class MainActivity : BaseActivity(), GymScheduleView {
         private val TAG = MainActivity::class.java.simpleName
     }
 
-    private var presenter: GymSchedulePresenter? = null
-
+    private lateinit var presenter: GymSchedulePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +34,15 @@ class MainActivity : BaseActivity(), GymScheduleView {
         val interactor = GymScheduleInteractorImpl(ourApplication.requestQueue, GymEventTransformer())
         presenter = GymSchedulePresenterImpl(this, interactor)
 
-        prev_button.setOnClickListener { _ -> presenter!!.onPrevPressed() }
+        prev_button.setOnClickListener { _ -> presenter.onPrevPressed() }
+        today_button.setOnClickListener { _ -> presenter.onTodayPressed() }
+        next_button.setOnClickListener { _ -> presenter.onNextPressed() }
 
-        today_button.setOnClickListener { _ -> presenter!!.onTodayPressed() }
-
-        next_button.setOnClickListener { _ -> presenter!!.onNextPressed() }
+        // TODO: placeholder values
+        pool_expandable_list_view.setAdapter(PoolExpandableListAdapter(this,
+                "Pool Activities", listOf("Aquafit", "Swim lessions", "drop-in time", "clubs and teams")))
+        val screenWidth = windowManager.defaultDisplay.width
+        pool_expandable_list_view.setIndicatorBoundsRelative(screenWidth - 100, screenWidth)
 
         pool_schedule_recycler_view.layoutManager = LinearLayoutManager(this)
         pool_schedule_recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
@@ -63,7 +67,7 @@ class MainActivity : BaseActivity(), GymScheduleView {
 
     override fun onStart() {
         super.onStart()
-        presenter!!.onViewStarted()
+        presenter.onViewStarted()
     }
 
     override fun showLoadingIndicator() {

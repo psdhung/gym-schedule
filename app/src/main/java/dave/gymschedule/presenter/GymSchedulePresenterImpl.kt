@@ -1,6 +1,5 @@
 package dave.gymschedule.presenter
 
-
 import android.util.Log
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.view.GymScheduleView
@@ -11,7 +10,8 @@ import java.util.ArrayList
 import java.util.Calendar
 import java.util.Locale
 
-class GymSchedulePresenterImpl(private val view: GymScheduleView, private val interactor: GymScheduleInteractor) : GymSchedulePresenter {
+class GymSchedulePresenterImpl(private val view: GymScheduleView,
+                               private val interactor: GymScheduleInteractor): GymSchedulePresenter {
     companion object {
         private val TAG = GymSchedulePresenterImpl::class.java.simpleName
 
@@ -65,19 +65,17 @@ class GymSchedulePresenterImpl(private val view: GymScheduleView, private val in
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ poolClasses ->
-                    Log.d(TAG, "subscribe called")
                     view.updateSchedule(poolClasses)
                     view.hideLoadingIndicator()
                     enableDateButtons(currentShownDay)
-                },
-                        { error ->
-                            Log.d(TAG, "failed to retrieve schedule", error)
-                            view.hideLoadingIndicator()
-                            view.showErrorMessage("Could not retrieve schedule", error)
-                            view.disableNextButton()
-                            view.disablePrevButton()
-                            view.enableTodayButton()
-                        })
+                }, { error ->
+                    Log.d(TAG, "failed to retrieve schedule", error)
+                    view.hideLoadingIndicator()
+                    view.showErrorMessage("Could not retrieve schedule", error)
+                    view.disableNextButton()
+                    view.disablePrevButton()
+                    view.enableTodayButton()
+                })
     }
 
     private fun setDateText(date: Calendar) {
@@ -86,10 +84,8 @@ class GymSchedulePresenterImpl(private val view: GymScheduleView, private val in
 
     private fun enableDateButtons(shownDate: Calendar) {
         if (dateLessThanOrEqualTo(shownDate, TODAY)) {
-            Log.d(TAG, "prev <= today")
             view.disablePrevButton()
         } else {
-            Log.d(TAG, "prev > today")
             view.enablePrevButton()
         }
 
@@ -107,14 +103,17 @@ class GymSchedulePresenterImpl(private val view: GymScheduleView, private val in
     }
 
     private fun dateLessThanOrEqualTo(first: Calendar, second: Calendar): Boolean {
-        return first.get(Calendar.YEAR) < second.get(Calendar.YEAR) || first.get(Calendar.DAY_OF_YEAR) <= second.get(Calendar.DAY_OF_YEAR)
+        return first.get(Calendar.YEAR) < second.get(Calendar.YEAR)
+                || first.get(Calendar.DAY_OF_YEAR) <= second.get(Calendar.DAY_OF_YEAR)
     }
 
     private fun dateGreaterThanOrEqualTo(first: Calendar, second: Calendar): Boolean {
-        return first.get(Calendar.YEAR) >= second.get(Calendar.YEAR) && first.get(Calendar.DAY_OF_YEAR) >= second.get(Calendar.DAY_OF_YEAR)
+        return first.get(Calendar.YEAR) >= second.get(Calendar.YEAR)
+                && first.get(Calendar.DAY_OF_YEAR) >= second.get(Calendar.DAY_OF_YEAR)
     }
 
     private fun datesOnSameDay(first: Calendar, second: Calendar): Boolean {
-        return first.get(Calendar.YEAR) == second.get(Calendar.YEAR) && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR)
+        return first.get(Calendar.YEAR) == second.get(Calendar.YEAR)
+                && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR)
     }
 }
