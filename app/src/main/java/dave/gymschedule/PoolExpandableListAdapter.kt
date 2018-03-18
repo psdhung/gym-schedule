@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.CheckBox
 import android.widget.TextView
 
 class PoolExpandableListAdapter(private val context: Context,
@@ -28,7 +29,8 @@ class PoolExpandableListAdapter(private val context: Context,
             _convertView = LayoutInflater.from(context).inflate(R.layout.list_header, null)
         }
 
-        _convertView!!.findViewById<TextView>(R.id.list_header_text).text = header
+        _convertView!!.findViewById<CheckBox>(R.id.list_header_checkbox).isChecked = false
+        _convertView.findViewById<TextView>(R.id.list_header_text).text = header
 
         return _convertView
     }
@@ -48,7 +50,8 @@ class PoolExpandableListAdapter(private val context: Context,
             _convertView = LayoutInflater.from(context).inflate(R.layout.list_item, null)
         }
 
-        _convertView!!.findViewById<TextView>(R.id.list_item_text).text = children[childPosition]
+        _convertView!!.findViewById<CheckBox>(R.id.list_item_checkbox).isChecked = false
+        _convertView.findViewById<TextView>(R.id.list_item_text).text = children[childPosition]
 
         return _convertView
     }
