@@ -7,5 +7,5 @@ interface GymSchedulePresenter {
 
     fun onNextPressed()
 
-    fun onViewStarted()
+    fun onViewCreated()
 }

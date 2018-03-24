@@ -51,6 +51,7 @@ open class MainActivity : BaseActivity(), GymScheduleView {
 
         pool_schedule_recycler_view.layoutManager = LinearLayoutManager(this)
         pool_schedule_recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        presenter.onViewCreated()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,12 +68,6 @@ open class MainActivity : BaseActivity(), GymScheduleView {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        presenter.onViewStarted()
     }
 
     override fun showLoadingIndicator() {

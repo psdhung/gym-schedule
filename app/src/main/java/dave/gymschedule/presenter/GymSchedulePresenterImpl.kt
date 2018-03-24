@@ -49,11 +49,9 @@ class GymSchedulePresenterImpl(private val view: GymScheduleView,
         getPoolClasses(currentShownDay)
     }
 
-
-    override fun onViewStarted() {
+    override fun onViewCreated() {
         getPoolClasses(todayString)
     }
-
 
     private fun getPoolClasses(date: Calendar) {
         view.disableAllRefreshButtons()

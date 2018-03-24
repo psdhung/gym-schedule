@@ -21,8 +21,8 @@ class GymScheduleModule(private val application: GymScheduleApplication) {
 
     @Provides
     @Singleton
-    fun providesRequestQueue(): RequestQueue {
-        return Volley.newRequestQueue(application)
+    fun providesRequestQueue(@ForApplication context: Context): RequestQueue {
+        return Volley.newRequestQueue(context)
     }
 
     @Provides
