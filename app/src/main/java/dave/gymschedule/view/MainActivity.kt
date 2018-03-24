@@ -9,8 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import dave.gymschedule.BaseActivity
 import dave.gymschedule.GymEventAdapter
+import dave.gymschedule.GymScheduleApplicationImpl
 import dave.gymschedule.Model.GymEvent
-import dave.gymschedule.PoolExpandableListAdapter
+import dave.gymschedule.GymScheduleExpandableListAdapter
 import dave.gymschedule.R
 import dave.gymschedule.interactor.GymScheduleInteractorImpl
 import dave.gymschedule.presenter.GymSchedulePresenter
@@ -18,20 +19,26 @@ import dave.gymschedule.presenter.GymSchedulePresenterImpl
 import dave.gymschedule.transformer.GymEventTransformer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
-class MainActivity : BaseActivity(), GymScheduleView {
+open class MainActivity : BaseActivity(), GymScheduleView {
     companion object {
         private val TAG = MainActivity::class.java.simpleName
     }
 
     private lateinit var presenter: GymSchedulePresenter
 
+    @Inject
+    lateinit var transformer: GymEventTransformer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        GymScheduleApplicationImpl.graph.inject(this)
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val interactor = GymScheduleInteractorImpl(ourApplication.requestQueue, GymEventTransformer())
+        val interactor = GymScheduleInteractorImpl(ourApplication.requestQueue, transformer)
         presenter = GymSchedulePresenterImpl(this, interactor)
 
         prev_button.setOnClickListener { _ -> presenter.onPrevPressed() }
@@ -39,7 +46,7 @@ class MainActivity : BaseActivity(), GymScheduleView {
         next_button.setOnClickListener { _ -> presenter.onNextPressed() }
 
         // TODO: placeholder values
-        pool_expandable_list_view.setAdapter(PoolExpandableListAdapter(this,
+        pool_expandable_list_view.setAdapter(GymScheduleExpandableListAdapter(this,
                 "Pool Activities", listOf("Aquafit", "Swim lessions", "drop-in time", "clubs and teams")))
         val screenWidth = windowManager.defaultDisplay.width
         pool_expandable_list_view.setIndicatorBoundsRelative(screenWidth - 100, screenWidth)

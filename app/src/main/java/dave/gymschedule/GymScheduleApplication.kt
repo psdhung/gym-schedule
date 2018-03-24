@@ -2,6 +2,6 @@ package dave.gymschedule
 
 import com.android.volley.RequestQueue
 
-interface GymEventApplication {
+interface GymScheduleApplication {
     val requestQueue: RequestQueue
 }

@@ -8,9 +8,9 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 
-class PoolExpandableListAdapter(private val context: Context,
-                                private val header: String,
-                                private val children: List<String>) : BaseExpandableListAdapter() {
+class GymScheduleExpandableListAdapter(private val context: Context,
+                                       private val header: String,
+                                       private val children: List<String>) : BaseExpandableListAdapter() {
     override fun getGroup(groupPosition: Int): Any {
         return header
     }
