@@ -1,7 +1,22 @@
 package dave.gymschedule
 
-import com.android.volley.RequestQueue
+import android.app.Application
+import dave.gymschedule.di.DaggerGymScheduleComponent
+import dave.gymschedule.di.GymScheduleComponent
+import dave.gymschedule.di.GymScheduleModule
 
-interface GymScheduleApplication {
-    val requestQueue: RequestQueue
+class GymScheduleApplication : Application() {
+
+    companion object {
+        @JvmStatic
+        lateinit var graph: GymScheduleComponent
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        graph = DaggerGymScheduleComponent.builder()
+                .gymScheduleModule(GymScheduleModule(this))
+                .build()
+        graph.inject(this)
+    }
 }

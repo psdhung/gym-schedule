@@ -8,9 +8,11 @@ import com.android.volley.toolbox.JsonObjectRequest
 import dave.gymschedule.Model.GymEvent
 import dave.gymschedule.transformer.GymEventTransformer
 import io.reactivex.Single
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
-class GymScheduleInteractorImpl(private val requestQueue: RequestQueue, private val transformer: GymEventTransformer) : GymScheduleInteractor {
+class GymScheduleInteractorImpl(private val requestQueue: RequestQueue,
+                                private val transformer: GymEventTransformer) : GymScheduleInteractor {
     companion object {
         private const val SCHEDULE_REQUEST_URL = "https://api.ymcagta.org/api/Classes/GetByCentreId?centreId=39&startDateTime=%1\$s+12:00:00+AM&endDateTime=%1\$s+11:59:59+PM"
     }

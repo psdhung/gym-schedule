@@ -11,7 +11,7 @@ import java.util.Calendar
 import java.util.Locale
 
 class GymSchedulePresenterImpl(private val view: GymScheduleView,
-                               private val interactor: GymScheduleInteractor): GymSchedulePresenter {
+                               private val interactor: GymScheduleInteractor) : GymSchedulePresenter {
     companion object {
         private val TAG = GymSchedulePresenterImpl::class.java.simpleName
 
