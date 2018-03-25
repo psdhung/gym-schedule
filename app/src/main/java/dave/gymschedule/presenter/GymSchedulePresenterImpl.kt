@@ -47,23 +47,23 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
 
     override fun onPrevPressed() {
         currentShownDay.add(Calendar.DAY_OF_YEAR, -1)
-        getPoolClasses(currentShownDay)
+        getGymEventForDate(currentShownDay)
     }
 
     override fun onTodayPressed() {
-        getPoolClasses(todayString)
+        getGymEventForDate(todayString)
     }
 
     override fun onNextPressed() {
         currentShownDay.add(Calendar.DAY_OF_YEAR, 1)
-        getPoolClasses(currentShownDay)
+        getGymEventForDate(currentShownDay)
     }
 
     override fun onViewCreated() {
-        getPoolClasses(todayString)
+        getGymEventForDate(todayString)
     }
 
-    private fun getPoolClasses(date: Calendar) {
+    private fun getGymEventForDate(date: Calendar) {
         view.disableAllRefreshButtons()
         view.hideErrorMessage()
         view.showLoadingIndicator()
@@ -128,11 +128,11 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
 
     // TODO placeholder code
     private var poolIsChecked = false
-    override fun isEventCategoryChecked(pooL_ACTIVITIES: EventType): Boolean {
+    override fun isEventCategoryChecked(eventType: EventType): Boolean {
         return poolIsChecked
     }
 
-    override fun onEventCategoryToggled(checked: Boolean, pooL_ACTIVITIES: EventType) {
+    override fun onEventCategoryToggled(checked: Boolean, eventType: EventType) {
         poolIsChecked = checked
         view.updateSchedule(getVisibleEvents(gymEvents))
     }

@@ -11,6 +11,7 @@ import dave.gymschedule.BaseActivity
 import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.GymScheduleApplication
 import dave.gymschedule.GymScheduleExpandableListAdapter
+import dave.gymschedule.Model.EventType
 import dave.gymschedule.Model.GymEvent
 import dave.gymschedule.R
 import dave.gymschedule.presenter.GymSchedulePresenter
@@ -40,12 +41,12 @@ open class MainActivity : BaseActivity(), GymScheduleView {
 
         // TODO: placeholder values
         pool_expandable_list_view.setAdapter(GymScheduleExpandableListAdapter(this, presenter,
-                "Pool Activities", listOf("Aquafit", "Swim lessions", "drop-in time", "clubs and teams")))
+                EventType.POOL_ACTIVITIES, listOf("Aquafit", "Swim lessions", "drop-in time", "clubs and teams")))
         val screenWidth = windowManager.defaultDisplay.width
         pool_expandable_list_view.setIndicatorBoundsRelative(screenWidth - 100, screenWidth)
 
-        pool_schedule_recycler_view.layoutManager = LinearLayoutManager(this)
-        pool_schedule_recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        gym_events_recycler_view.layoutManager = LinearLayoutManager(this)
+        gym_events_recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         presenter.onViewCreated()
     }
 
@@ -101,7 +102,7 @@ open class MainActivity : BaseActivity(), GymScheduleView {
 
     override fun updateSchedule(gymEvents: List<GymEvent>) {
         Log.d(TAG, "update schedule")
-        pool_schedule_recycler_view.adapter = GymEventAdapter(gymEvents)
+        gym_events_recycler_view.adapter = GymEventAdapter(gymEvents)
     }
 
     override fun setDate(date: String) {

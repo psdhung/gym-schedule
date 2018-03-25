@@ -54,7 +54,7 @@ class GymEventTransformer {
         val details = jsonObject.getString("titleDetail")
         val startTime = jsonObject.getString("startTime")
         val endTime = jsonObject.getString("endTime")
-        Log.d(TAG, "name=$name, eventTypeId=$eventTypeId, category=${EventType.getCategoryFromId(eventTypeId)}")
-        return GymEvent(name, EventType.getCategoryFromId(eventTypeId), details, startTime, endTime)
+        Log.d(TAG, "name=$name, eventTypeId=$eventTypeId, category=${EventType.getEventTypeFromId(eventTypeId)}")
+        return GymEvent(name, EventType.getEventTypeFromId(eventTypeId), details, startTime, endTime)
     }
 }

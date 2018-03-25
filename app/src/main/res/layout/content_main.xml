@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="dave.poolschedule.view.MainActivity">
+        tools:context="dave.gymschedule.view.MainActivity">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/toolbar_wrapper"
@@ -81,7 +81,7 @@
             android:background="@android:color/black" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/pool_schedule_recycler_view"
+            android:id="@+id/gym_events_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/divider"

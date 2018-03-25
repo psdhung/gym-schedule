@@ -8,34 +8,34 @@ import android.widget.TextView
 import dave.gymschedule.Model.GymEvent
 import java.util.ArrayList
 
-class GymEventAdapter(poolClasses: List<GymEvent>) : RecyclerView.Adapter<GymEventAdapter.PoolClassViewHolder>() {
+class GymEventAdapter(gymEvents: List<GymEvent>) : RecyclerView.Adapter<GymEventAdapter.GymEventViewHolder>() {
     companion object {
 
         private const val LANE_SWIM_NAME = "Lane Swim"
     }
 
-    private val poolClasses: List<GymEvent>
+    private val gymEvents: List<GymEvent>
 
-    class PoolClassViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class GymEventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var view: View = itemView
 
     }
 
     init {
-        this.poolClasses = ArrayList(poolClasses)
+        this.gymEvents = ArrayList(gymEvents)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoolClassViewHolder {
-        val layout = LayoutInflater.from(parent.context).inflate(R.layout.pool_class_view_holder, parent, false)
-        return PoolClassViewHolder(layout)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GymEventViewHolder {
+        val layout = LayoutInflater.from(parent.context).inflate(R.layout.gym_event_view_holder, parent, false)
+        return GymEventViewHolder(layout)
     }
 
-    override fun onBindViewHolder(holder: PoolClassViewHolder, position: Int) {
-        val poolClass = poolClasses[position]
-        (holder.view.findViewById<View>(R.id.name) as TextView).text = poolClass.name
+    override fun onBindViewHolder(holder: GymEventViewHolder, position: Int) {
+        val event = gymEvents[position]
+        (holder.view.findViewById<View>(R.id.name) as TextView).text = event.name
 
         val detailsTextView = holder.view.findViewById<TextView>(R.id.details)
-        val details = poolClass.details
+        val details = event.details
         if (details.isNotEmpty()) {
             detailsTextView.text = details
             detailsTextView.visibility = View.VISIBLE
@@ -43,11 +43,11 @@ class GymEventAdapter(poolClasses: List<GymEvent>) : RecyclerView.Adapter<GymEve
             detailsTextView.visibility = View.GONE
         }
 
-        (holder.view.findViewById<View>(R.id.start_time) as TextView).text = poolClass.startTime
+        (holder.view.findViewById<View>(R.id.start_time) as TextView).text = event.startTime
 
-        (holder.view.findViewById<View>(R.id.end_time) as TextView).text = poolClass.endTime
+        (holder.view.findViewById<View>(R.id.end_time) as TextView).text = event.endTime
 
-        if (LANE_SWIM_NAME.equals(poolClass.name, ignoreCase = true)) {
+        if (LANE_SWIM_NAME.equals(event.name, ignoreCase = true)) {
             holder.view.setBackgroundResource(R.drawable.bg_lane_swim)
         } else {
             holder.view.background = null
@@ -55,7 +55,7 @@ class GymEventAdapter(poolClasses: List<GymEvent>) : RecyclerView.Adapter<GymEve
     }
 
     override fun getItemCount(): Int {
-        return poolClasses.size
+        return gymEvents.size
     }
 
 

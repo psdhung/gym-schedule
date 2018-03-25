@@ -1,11 +1,11 @@
 package dave.gymschedule.Model
 
-enum class EventType(val eventTypeId: Int) {
-    OTHER(-1),
-    POOL_ACTIVITIES(4);
+enum class EventType(val eventName: String, val eventTypeId: Int) {
+    OTHER("Other", -1),
+    POOL_ACTIVITIES("Pool Activities", 4);
 
     companion object {
-        fun getCategoryFromId(id: Int) : EventType {
+        fun getEventTypeFromId(id: Int) : EventType {
             for (category in EventType.values()) {
                 if (category.eventTypeId == id) {
                     return category

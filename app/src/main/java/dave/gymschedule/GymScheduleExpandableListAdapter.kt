@@ -12,11 +12,11 @@ import dave.gymschedule.presenter.GymSchedulePresenter
 
 class GymScheduleExpandableListAdapter(private val context: Context,
                                        private val presenter: GymSchedulePresenter,
-                                       private val header: String,
+                                       private val eventType: EventType,
                                        private val children: List<String>) : BaseExpandableListAdapter() {
 
     override fun getGroup(groupPosition: Int): Any {
-        return header
+        return eventType
     }
 
     override fun getGroupCount(): Int {
@@ -34,9 +34,9 @@ class GymScheduleExpandableListAdapter(private val context: Context,
         }
 
         val headerCheckbox = _convertView!!.findViewById<CheckBox>(R.id.list_header_checkbox)
-        headerCheckbox.isChecked = presenter.isEventCategoryChecked(EventType.POOL_ACTIVITIES)
-        headerCheckbox.setOnClickListener{ _ -> presenter.onEventCategoryToggled(headerCheckbox.isChecked, EventType.POOL_ACTIVITIES) }
-        _convertView.findViewById<TextView>(R.id.list_header_text).text = header
+        headerCheckbox.isChecked = presenter.isEventCategoryChecked(eventType)
+        headerCheckbox.setOnClickListener{ _ -> presenter.onEventCategoryToggled(headerCheckbox.isChecked, eventType) }
+        _convertView.findViewById<TextView>(R.id.list_header_text).text = eventType.eventName
 
         return _convertView
     }

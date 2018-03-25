@@ -11,7 +11,7 @@ interface GymSchedulePresenter {
 
     fun onViewCreated()
 
-    fun onEventCategoryToggled(checked: Boolean, pooL_ACTIVITIES: EventType)
+    fun onEventCategoryToggled(checked: Boolean, gymEvents: EventType)
 
-    fun isEventCategoryChecked(pooL_ACTIVITIES: EventType): Boolean
+    fun isEventCategoryChecked(gymEvents: EventType): Boolean
 }
