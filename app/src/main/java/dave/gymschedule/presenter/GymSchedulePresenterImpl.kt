@@ -1,6 +1,7 @@
 package dave.gymschedule.presenter
 
 import android.util.Log
+import dave.gymschedule.GymScheduleApplication
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.view.GymScheduleView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -9,14 +10,17 @@ import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Locale
+import javax.inject.Inject
 
-class GymSchedulePresenterImpl(private val view: GymScheduleView,
-                               private val interactor: GymScheduleInteractor) : GymSchedulePresenter {
+class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedulePresenter {
     companion object {
         private val TAG = GymSchedulePresenterImpl::class.java.simpleName
 
         private val DISPLAYED_DATE_FORMAT = SimpleDateFormat("MMM dd, YYYY", Locale.getDefault())
     }
+
+    @Inject
+    lateinit var interactor: GymScheduleInteractor
 
     private val TODAY: Calendar
     private val MAX_FUTURE_DAY: Calendar
@@ -29,6 +33,7 @@ class GymSchedulePresenterImpl(private val view: GymScheduleView,
         }
 
     init {
+        GymScheduleApplication.graph.inject(this)
         currentShownDay = Calendar.getInstance()
         TODAY = Calendar.getInstance()
         MAX_FUTURE_DAY = Calendar.getInstance()

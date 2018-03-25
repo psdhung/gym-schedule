@@ -13,12 +13,10 @@ import dave.gymschedule.GymScheduleApplication
 import dave.gymschedule.GymScheduleExpandableListAdapter
 import dave.gymschedule.Model.GymEvent
 import dave.gymschedule.R
-import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.presenter.GymSchedulePresenter
 import dave.gymschedule.presenter.GymSchedulePresenterImpl
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import javax.inject.Inject
 
 open class MainActivity : BaseActivity(), GymScheduleView {
     companion object {
@@ -27,9 +25,6 @@ open class MainActivity : BaseActivity(), GymScheduleView {
 
     private lateinit var presenter: GymSchedulePresenter
 
-    @Inject
-    lateinit var interactor: GymScheduleInteractor
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GymScheduleApplication.graph.inject(this)
@@ -37,7 +32,7 @@ open class MainActivity : BaseActivity(), GymScheduleView {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        presenter = GymSchedulePresenterImpl(this, interactor)
+        presenter = GymSchedulePresenterImpl(this)
 
         prev_button.setOnClickListener { _ -> presenter.onPrevPressed() }
         today_button.setOnClickListener { _ -> presenter.onTodayPressed() }

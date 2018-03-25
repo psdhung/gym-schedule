@@ -16,12 +16,12 @@ class GymScheduleModule(private val application: GymScheduleApplication) {
 
     @Provides
     @Singleton
-    @ForApplication
+    @ApplicationContext
     fun provideApplicationContext(): Context = application
 
     @Provides
     @Singleton
-    fun providesRequestQueue(@ForApplication context: Context): RequestQueue {
+    fun providesRequestQueue(@ApplicationContext context: Context): RequestQueue {
         return Volley.newRequestQueue(context)
     }
 
