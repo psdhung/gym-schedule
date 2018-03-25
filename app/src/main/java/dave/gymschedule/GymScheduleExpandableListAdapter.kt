@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import dave.gymschedule.Model.EventType
+import dave.gymschedule.presenter.GymSchedulePresenter
 
 class GymScheduleExpandableListAdapter(private val context: Context,
+                                       private val presenter: GymSchedulePresenter,
                                        private val header: String,
                                        private val children: List<String>) : BaseExpandableListAdapter() {
+
     override fun getGroup(groupPosition: Int): Any {
         return header
     }
@@ -29,7 +33,9 @@ class GymScheduleExpandableListAdapter(private val context: Context,
             _convertView = LayoutInflater.from(context).inflate(R.layout.list_header, null)
         }
 
-        _convertView!!.findViewById<CheckBox>(R.id.list_header_checkbox).isChecked = false
+        val headerCheckbox = _convertView!!.findViewById<CheckBox>(R.id.list_header_checkbox)
+        headerCheckbox.isChecked = presenter.isEventCategoryChecked(EventType.POOL_ACTIVITIES)
+        headerCheckbox.setOnClickListener{ _ -> presenter.onEventCategoryToggled(headerCheckbox.isChecked, EventType.POOL_ACTIVITIES) }
         _convertView.findViewById<TextView>(R.id.list_header_text).text = header
 
         return _convertView
@@ -37,6 +43,10 @@ class GymScheduleExpandableListAdapter(private val context: Context,
 
     override fun getChild(groupPosition: Int, childPosition: Int): Any {
         return children[childPosition]
+    }
+
+    override fun getChildrenCount(groupPosition: Int): Int {
+        return children.size
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
@@ -58,10 +68,6 @@ class GymScheduleExpandableListAdapter(private val context: Context,
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
         return true
-    }
-
-    override fun getChildrenCount(groupPosition: Int): Int {
-        return children.size
     }
 
     override fun hasStableIds(): Boolean {

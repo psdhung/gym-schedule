@@ -39,7 +39,7 @@ open class MainActivity : BaseActivity(), GymScheduleView {
         next_button.setOnClickListener { _ -> presenter.onNextPressed() }
 
         // TODO: placeholder values
-        pool_expandable_list_view.setAdapter(GymScheduleExpandableListAdapter(this,
+        pool_expandable_list_view.setAdapter(GymScheduleExpandableListAdapter(this, presenter,
                 "Pool Activities", listOf("Aquafit", "Swim lessions", "drop-in time", "clubs and teams")))
         val screenWidth = windowManager.defaultDisplay.width
         pool_expandable_list_view.setIndicatorBoundsRelative(screenWidth - 100, screenWidth)

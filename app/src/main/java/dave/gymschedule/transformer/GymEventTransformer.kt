@@ -2,6 +2,7 @@ package dave.gymschedule.transformer
 
 
 import android.util.Log
+import dave.gymschedule.Model.EventType
 import dave.gymschedule.Model.GymEvent
 import org.json.JSONArray
 import org.json.JSONException
@@ -40,7 +41,6 @@ class GymEventTransformer {
         val gymEvents = ArrayList<GymEvent>()
         for (i in 0 until classesArray.length()) {
             val jsonObject = classesArray.getJSONObject(i)
-//            val typeId = jsonObject.getInt("classTypeId")
             gymEvents.add(getGymEventFromJsonObject(jsonObject))
         }
 
@@ -48,11 +48,13 @@ class GymEventTransformer {
     }
 
     @Throws(JSONException::class)
-    private fun getGymEventFromJsonObject(`object`: JSONObject): GymEvent {
-        val name = `object`.getString("className")
-        val details = `object`.getString("titleDetail")
-        val startTime = `object`.getString("startTime")
-        val endTime = `object`.getString("endTime")
-        return GymEvent(name, details, startTime, endTime)
+    private fun getGymEventFromJsonObject(jsonObject: JSONObject): GymEvent {
+        val name = jsonObject.getString("className")
+        val eventTypeId = jsonObject.getInt("classTypeId")
+        val details = jsonObject.getString("titleDetail")
+        val startTime = jsonObject.getString("startTime")
+        val endTime = jsonObject.getString("endTime")
+        Log.d(TAG, "name=$name, eventTypeId=$eventTypeId, category=${EventType.getCategoryFromId(eventTypeId)}")
+        return GymEvent(name, EventType.getCategoryFromId(eventTypeId), details, startTime, endTime)
     }
 }

@@ -2,6 +2,8 @@ package dave.gymschedule.presenter
 
 import android.util.Log
 import dave.gymschedule.GymScheduleApplication
+import dave.gymschedule.Model.EventType
+import dave.gymschedule.Model.GymEvent
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.view.GymScheduleView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,6 +15,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedulePresenter {
+
     companion object {
         private val TAG = GymSchedulePresenterImpl::class.java.simpleName
 
@@ -25,6 +28,8 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
     private val TODAY: Calendar
     private val MAX_FUTURE_DAY: Calendar
     private var currentShownDay: Calendar
+
+    private var gymEvents: List<GymEvent> = emptyList()
 
     private val todayString: Calendar
         get() {
@@ -67,8 +72,9 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
         interactor.getGymEventsObservable(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ poolClasses ->
-                    view.updateSchedule(poolClasses)
+                .subscribe({ receivedGymEvents ->
+                    gymEvents = receivedGymEvents
+                    view.updateSchedule(getVisibleEvents(gymEvents))
                     view.hideLoadingIndicator()
                     enableDateButtons(currentShownDay)
                 }, { error ->
@@ -118,5 +124,23 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
     private fun datesOnSameDay(first: Calendar, second: Calendar): Boolean {
         return first.get(Calendar.YEAR) == second.get(Calendar.YEAR)
                 && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR)
+    }
+
+    // TODO placeholder code
+    private var poolIsChecked = false
+    override fun isEventCategoryChecked(pooL_ACTIVITIES: EventType): Boolean {
+        return poolIsChecked
+    }
+
+    override fun onEventCategoryToggled(checked: Boolean, pooL_ACTIVITIES: EventType) {
+        poolIsChecked = checked
+        view.updateSchedule(getVisibleEvents(gymEvents))
+    }
+
+    private fun getVisibleEvents(gymEvents: List<GymEvent>) : List<GymEvent> {
+        if (!poolIsChecked) {
+            return gymEvents
+        }
+        return gymEvents.filter { it -> it.eventType == EventType.POOL_ACTIVITIES }
     }
 }
