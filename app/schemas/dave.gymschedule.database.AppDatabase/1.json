@@ -1,0 +1,39 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "8ed0ff4a4b963cf32816a149ba3e362c",
+    "entities": [
+      {
+        "tableName": "EventTypeState",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eventTypeId` INTEGER NOT NULL, `checked` INTEGER NOT NULL, PRIMARY KEY(`eventTypeId`))",
+        "fields": [
+          {
+            "fieldPath": "eventTypeId",
+            "columnName": "eventTypeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checked",
+            "columnName": "checked",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "eventTypeId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"8ed0ff4a4b963cf32816a149ba3e362c\")"
+    ]
+  }
+}
