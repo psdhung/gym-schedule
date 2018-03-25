@@ -2,8 +2,9 @@ package dave.gymschedule.presenter
 
 import android.util.Log
 import dave.gymschedule.GymScheduleApplication
-import dave.gymschedule.Model.EventType
-import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.model.EventType
+import dave.gymschedule.model.GymEvent
+import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.view.GymScheduleView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,7 +15,7 @@ import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
-class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedulePresenter {
+class GymSchedulePresenterImpl(private val view: GymScheduleView) : GymSchedulePresenter {
 
     companion object {
         private val TAG = GymSchedulePresenterImpl::class.java.simpleName
@@ -23,7 +24,10 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
     }
 
     @Inject
-    lateinit var interactor: GymScheduleInteractor
+    lateinit var scheduleInteractor: GymScheduleInteractor
+
+    @Inject
+    lateinit var eventTypeStateInteractor: EventTypeStateInteractor
 
     private val TODAY: Calendar
     private val MAX_FUTURE_DAY: Calendar
@@ -69,7 +73,7 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
         view.showLoadingIndicator()
         view.updateSchedule(ArrayList())
         setDateText(date)
-        interactor.getGymEventsObservable(date)
+        scheduleInteractor.getGymEventsObservable(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ receivedGymEvents ->
@@ -126,21 +130,20 @@ class GymSchedulePresenterImpl (private val view: GymScheduleView) : GymSchedule
                 && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR)
     }
 
-    // TODO placeholder code
-    private var poolIsChecked = false
     override fun isEventCategoryChecked(eventType: EventType): Boolean {
-        return poolIsChecked
+        return eventTypeStateInteractor.getStateOfEventType(eventType)
     }
 
-    override fun onEventCategoryToggled(checked: Boolean, eventType: EventType) {
-        poolIsChecked = checked
+    override fun onEventCategoryToggled(eventType: EventType, checked: Boolean) {
+        eventTypeStateInteractor.updateEventTypeState(eventType, checked)
         view.updateSchedule(getVisibleEvents(gymEvents))
     }
 
-    private fun getVisibleEvents(gymEvents: List<GymEvent>) : List<GymEvent> {
-        if (!poolIsChecked) {
+    private fun getVisibleEvents(gymEvents: List<GymEvent>): List<GymEvent> {
+        if (!eventTypeStateInteractor.anyEventTypesChecked()) {
             return gymEvents
         }
-        return gymEvents.filter { it -> it.eventType == EventType.POOL_ACTIVITIES }
+        return gymEvents.filter { it -> eventTypeStateInteractor.getStateOfEventType(it.eventType) }
     }
+
 }

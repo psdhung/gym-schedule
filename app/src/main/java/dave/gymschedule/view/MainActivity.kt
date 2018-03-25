@@ -11,8 +11,8 @@ import dave.gymschedule.BaseActivity
 import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.GymScheduleApplication
 import dave.gymschedule.GymScheduleExpandableListAdapter
-import dave.gymschedule.Model.EventType
-import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.model.EventType
+import dave.gymschedule.model.GymEvent
 import dave.gymschedule.R
 import dave.gymschedule.presenter.GymSchedulePresenter
 import dave.gymschedule.presenter.GymSchedulePresenterImpl

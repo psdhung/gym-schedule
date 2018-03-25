@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.CheckBox
 import android.widget.TextView
-import dave.gymschedule.Model.EventType
+import dave.gymschedule.model.EventType
 import dave.gymschedule.presenter.GymSchedulePresenter
 
 class GymScheduleExpandableListAdapter(private val context: Context,
@@ -35,7 +35,7 @@ class GymScheduleExpandableListAdapter(private val context: Context,
 
         val headerCheckbox = _convertView!!.findViewById<CheckBox>(R.id.list_header_checkbox)
         headerCheckbox.isChecked = presenter.isEventCategoryChecked(eventType)
-        headerCheckbox.setOnClickListener{ _ -> presenter.onEventCategoryToggled(headerCheckbox.isChecked, eventType) }
+        headerCheckbox.setOnClickListener { _ -> presenter.onEventCategoryToggled(eventType, headerCheckbox.isChecked) }
         _convertView.findViewById<TextView>(R.id.list_header_text).text = eventType.eventName
 
         return _convertView
@@ -73,4 +73,5 @@ class GymScheduleExpandableListAdapter(private val context: Context,
     override fun hasStableIds(): Boolean {
         return false
     }
+
 }

@@ -2,8 +2,8 @@ package dave.gymschedule.transformer
 
 
 import android.util.Log
-import dave.gymschedule.Model.EventType
-import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.model.EventType
+import dave.gymschedule.model.GymEvent
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

@@ -1,4 +1,4 @@
-package dave.gymschedule.Model
+package dave.gymschedule.model
 
 data class GymEvent(val name: String,
                     val eventType: EventType,

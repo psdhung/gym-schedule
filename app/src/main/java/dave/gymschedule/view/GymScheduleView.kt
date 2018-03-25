@@ -1,6 +1,6 @@
 package dave.gymschedule.view
 
-import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.model.GymEvent
 
 interface GymScheduleView {
     fun showLoadingIndicator()

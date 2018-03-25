@@ -5,7 +5,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.model.GymEvent
 import dave.gymschedule.transformer.GymEventTransformer
 import io.reactivex.Single
 import java.util.Calendar

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.model.GymEvent
 import java.util.ArrayList
 
 class GymEventAdapter(gymEvents: List<GymEvent>) : RecyclerView.Adapter<GymEventAdapter.GymEventViewHolder>() {

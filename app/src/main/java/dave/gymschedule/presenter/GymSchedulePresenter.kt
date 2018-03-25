@@ -1,6 +1,6 @@
 package dave.gymschedule.presenter
 
-import dave.gymschedule.Model.EventType
+import dave.gymschedule.model.EventType
 
 interface GymSchedulePresenter {
     fun onPrevPressed()
@@ -11,7 +11,7 @@ interface GymSchedulePresenter {
 
     fun onViewCreated()
 
-    fun onEventCategoryToggled(checked: Boolean, gymEvents: EventType)
+    fun onEventCategoryToggled(eventType: EventType, checked: Boolean)
 
-    fun isEventCategoryChecked(gymEvents: EventType): Boolean
+    fun isEventCategoryChecked(eventType: EventType): Boolean
 }

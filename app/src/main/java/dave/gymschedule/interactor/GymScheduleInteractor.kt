@@ -1,6 +1,6 @@
 package dave.gymschedule.interactor
 
-import dave.gymschedule.Model.GymEvent
+import dave.gymschedule.model.GymEvent
 import io.reactivex.Single
 import java.util.*
 

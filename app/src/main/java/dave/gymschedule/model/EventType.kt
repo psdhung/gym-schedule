@@ -1,4 +1,4 @@
-package dave.gymschedule.Model
+package dave.gymschedule.model
 
 enum class EventType(val eventName: String, val eventTypeId: Int) {
     OTHER("Other", -1),
