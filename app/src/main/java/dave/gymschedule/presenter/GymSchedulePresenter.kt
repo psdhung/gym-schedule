@@ -1,15 +1,13 @@
 package dave.gymschedule.presenter
 
 import dave.gymschedule.model.EventType
+import java.util.Calendar
 
 interface GymSchedulePresenter {
-    fun onPrevPressed()
 
-    fun onTodayPressed()
+    fun onViewCreated(date: Calendar)
 
-    fun onNextPressed()
-
-    fun onViewCreated()
+    fun onViewDestroyed()
 
     fun onEventCategoryToggled(eventType: EventType, checked: Boolean)
 

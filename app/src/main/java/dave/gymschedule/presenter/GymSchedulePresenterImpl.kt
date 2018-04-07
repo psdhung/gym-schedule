@@ -2,10 +2,10 @@ package dave.gymschedule.presenter
 
 import android.util.Log
 import dave.gymschedule.GymScheduleApplication
-import dave.gymschedule.model.EventType
-import dave.gymschedule.model.GymEvent
 import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.interactor.GymScheduleInteractor
+import dave.gymschedule.model.EventType
+import dave.gymschedule.model.GymEvent
 import dave.gymschedule.view.GymScheduleView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +15,7 @@ import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
-class GymSchedulePresenterImpl(private val view: GymScheduleView) : GymSchedulePresenter {
+class GymSchedulePresenterImpl(private var view: GymScheduleView?) : GymSchedulePresenter {
 
     companion object {
         private val TAG = GymSchedulePresenterImpl::class.java.simpleName
@@ -29,105 +29,42 @@ class GymSchedulePresenterImpl(private val view: GymScheduleView) : GymScheduleP
     @Inject
     lateinit var eventTypeStateInteractor: EventTypeStateInteractor
 
-    private val TODAY: Calendar
-    private val MAX_FUTURE_DAY: Calendar
-    private var currentShownDay: Calendar
-
     private var gymEvents: List<GymEvent> = emptyList()
-
-    private val todayString: Calendar
-        get() {
-            currentShownDay = Calendar.getInstance()
-            return currentShownDay
-        }
 
     init {
         GymScheduleApplication.graph.inject(this)
-        currentShownDay = Calendar.getInstance()
-        TODAY = Calendar.getInstance()
-        MAX_FUTURE_DAY = Calendar.getInstance()
-        MAX_FUTURE_DAY.add(Calendar.DAY_OF_YEAR, 7)
     }
 
-    override fun onPrevPressed() {
-        currentShownDay.add(Calendar.DAY_OF_YEAR, -1)
-        getGymEventForDate(currentShownDay)
+    override fun onViewCreated(date: Calendar) {
+        Log.d(TAG, "getting schedule for date: ${date.time}")
+        getGymEventForDate(date)
     }
 
-    override fun onTodayPressed() {
-        getGymEventForDate(todayString)
-    }
-
-    override fun onNextPressed() {
-        currentShownDay.add(Calendar.DAY_OF_YEAR, 1)
-        getGymEventForDate(currentShownDay)
-    }
-
-    override fun onViewCreated() {
-        getGymEventForDate(todayString)
+    override fun onViewDestroyed() {
+        view = null
     }
 
     private fun getGymEventForDate(date: Calendar) {
-        view.disableAllRefreshButtons()
-        view.hideErrorMessage()
-        view.showLoadingIndicator()
-        view.updateSchedule(ArrayList())
+        view?.hideErrorMessage()
+        view?.showLoadingIndicator()
+        view?.updateSchedule(ArrayList())
         setDateText(date)
         scheduleInteractor.getGymEventsObservable(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ receivedGymEvents ->
                     gymEvents = receivedGymEvents
-                    view.updateSchedule(getVisibleEvents(gymEvents))
-                    view.hideLoadingIndicator()
-                    enableDateButtons(currentShownDay)
+                    view?.updateSchedule(getVisibleEvents(gymEvents))
+                    view?.hideLoadingIndicator()
                 }, { error ->
                     Log.d(TAG, "failed to retrieve schedule", error)
-                    view.hideLoadingIndicator()
-                    view.showErrorMessage("Could not retrieve schedule", error)
-                    view.disableNextButton()
-                    view.disablePrevButton()
-                    view.enableTodayButton()
+                    view?.hideLoadingIndicator()
+                    view?.showErrorMessage("Could not retrieve schedule", error)
                 })
     }
 
     private fun setDateText(date: Calendar) {
-        view.setDate(DISPLAYED_DATE_FORMAT.format(date.time))
-    }
-
-    private fun enableDateButtons(shownDate: Calendar) {
-        if (dateLessThanOrEqualTo(shownDate, TODAY)) {
-            view.disablePrevButton()
-        } else {
-            view.enablePrevButton()
-        }
-
-        if (datesOnSameDay(shownDate, TODAY)) {
-            view.disableTodayButton()
-        } else {
-            view.enableTodayButton()
-        }
-
-        if (dateGreaterThanOrEqualTo(shownDate, MAX_FUTURE_DAY)) {
-            view.disableNextButton()
-        } else {
-            view.enableNextButton()
-        }
-    }
-
-    private fun dateLessThanOrEqualTo(first: Calendar, second: Calendar): Boolean {
-        return first.get(Calendar.YEAR) < second.get(Calendar.YEAR)
-                || first.get(Calendar.DAY_OF_YEAR) <= second.get(Calendar.DAY_OF_YEAR)
-    }
-
-    private fun dateGreaterThanOrEqualTo(first: Calendar, second: Calendar): Boolean {
-        return first.get(Calendar.YEAR) >= second.get(Calendar.YEAR)
-                && first.get(Calendar.DAY_OF_YEAR) >= second.get(Calendar.DAY_OF_YEAR)
-    }
-
-    private fun datesOnSameDay(first: Calendar, second: Calendar): Boolean {
-        return first.get(Calendar.YEAR) == second.get(Calendar.YEAR)
-                && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR)
+        view?.setDate(DISPLAYED_DATE_FORMAT.format(date.time))
     }
 
     override fun isEventCategoryChecked(eventType: EventType): Boolean {
@@ -136,7 +73,7 @@ class GymSchedulePresenterImpl(private val view: GymScheduleView) : GymScheduleP
 
     override fun onEventCategoryToggled(eventType: EventType, checked: Boolean) {
         eventTypeStateInteractor.updateEventTypeState(eventType, checked)
-        view.updateSchedule(getVisibleEvents(gymEvents))
+        view?.updateSchedule(getVisibleEvents(gymEvents))
     }
 
     private fun getVisibleEvents(gymEvents: List<GymEvent>): List<GymEvent> {
