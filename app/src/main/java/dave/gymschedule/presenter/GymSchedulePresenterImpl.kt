@@ -4,9 +4,9 @@ import android.util.Log
 import dave.gymschedule.GymScheduleApplication
 import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.interactor.GymScheduleInteractor
-import dave.gymschedule.model.EventType
 import dave.gymschedule.model.GymEvent
 import dave.gymschedule.view.GymScheduleView
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
@@ -31,30 +31,44 @@ class GymSchedulePresenterImpl(private var view: GymScheduleView?) : GymSchedule
 
     private var gymEvents: List<GymEvent> = emptyList()
 
+    private lateinit var date: Calendar
+
     init {
         GymScheduleApplication.graph.inject(this)
     }
 
     override fun onViewCreated(date: Calendar) {
-        Log.d(TAG, "getting schedule for date: ${date.time}")
-        getGymEventForDate(date)
+        Log.d(TAG, "[${date.time}] getting schedule for date: ${date.time}")
+        this.date = date
+        eventTypeStateInteractor.getEventTypeMapPublishSubject()
+                .subscribe { _ ->
+                    Log.d(TAG, "[${date.time}] onViewCreated, received event states, getting gym events for date")
+                    getGymEventForDate()
+                }
     }
 
     override fun onViewDestroyed() {
         view = null
     }
 
-    private fun getGymEventForDate(date: Calendar) {
+    private fun getGymEventForDate() {
         view?.hideErrorMessage()
         view?.showLoadingIndicator()
         view?.updateSchedule(ArrayList())
         setDateText(date)
-        scheduleInteractor.getGymEventsObservable(date)
+        updateEventList(date)
+    }
+
+    private fun updateEventList(date: Calendar) {
+        scheduleInteractor.getGymEventsSingle(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ receivedGymEvents ->
+                .flatMapObservable { receivedGymEvents ->
                     gymEvents = receivedGymEvents
-                    view?.updateSchedule(getVisibleEvents(gymEvents))
+                    getVisibleEvents(gymEvents)
+                }
+                .subscribe({ visibleEvents ->
+                    view?.updateSchedule(visibleEvents)
                     view?.hideLoadingIndicator()
                 }, { error ->
                     Log.d(TAG, "failed to retrieve schedule", error)
@@ -67,20 +81,16 @@ class GymSchedulePresenterImpl(private var view: GymScheduleView?) : GymSchedule
         view?.setDate(DISPLAYED_DATE_FORMAT.format(date.time))
     }
 
-    override fun isEventCategoryChecked(eventType: EventType): Boolean {
-        return eventTypeStateInteractor.getStateOfEventType(eventType)
-    }
-
-    override fun onEventCategoryToggled(eventType: EventType, checked: Boolean) {
-        eventTypeStateInteractor.updateEventTypeState(eventType, checked)
-        view?.updateSchedule(getVisibleEvents(gymEvents))
-    }
-
-    private fun getVisibleEvents(gymEvents: List<GymEvent>): List<GymEvent> {
+    private fun getVisibleEvents(gymEvents: List<GymEvent>): Observable<List<GymEvent>> {
         if (!eventTypeStateInteractor.anyEventTypesChecked()) {
-            return gymEvents
+            Log.d(TAG, "[${date.time}] no events checked, returning unmodified gym event list")
+            return Observable.just(gymEvents)
         }
-        return gymEvents.filter { it -> eventTypeStateInteractor.getStateOfEventType(it.eventType) }
+        return eventTypeStateInteractor.getEventTypeMapPublishSubject()
+                .map { eventTypeMap ->
+                    Log.d(TAG, "[${date.time}] got event states, filtering gym event list")
+                    gymEvents.filter { eventTypeMap[it.eventType.eventTypeId] ?: false }
+                }
     }
 
 }

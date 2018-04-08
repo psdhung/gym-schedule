@@ -16,7 +16,7 @@ import dave.gymschedule.transformer.GymEventTransformer
 import javax.inject.Singleton
 
 @Module
-class GymScheduleModule(private val application: GymScheduleApplication) {
+class AppModule(private val application: GymScheduleApplication) {
 
     @Provides
     @Singleton

@@ -5,5 +5,5 @@ import io.reactivex.Single
 import java.util.*
 
 interface GymScheduleInteractor {
-    fun getGymEventsObservable(date: Calendar): Single<List<GymEvent>>
+    fun getGymEventsSingle(date: Calendar): Single<List<GymEvent>>
 }

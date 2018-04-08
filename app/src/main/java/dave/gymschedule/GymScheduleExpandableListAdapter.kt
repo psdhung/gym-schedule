@@ -1,18 +1,31 @@
 package dave.gymschedule
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.model.EventType
+import javax.inject.Inject
 
 class GymScheduleExpandableListAdapter(private val context: Context,
-//                                       private val presenter: GymSchedulePresenter,
                                        private val eventType: EventType,
                                        private val children: List<String>) : BaseExpandableListAdapter() {
+
+    companion object {
+        private val TAG =  GymScheduleExpandableListAdapter::class.java.simpleName
+    }
+
+    @Inject
+    lateinit var eventTypeStateInteractor: EventTypeStateInteractor
+
+    init {
+        GymScheduleApplication.graph.inject(this)
+    }
 
     override fun getGroup(groupPosition: Int): Any {
         return eventType
@@ -33,8 +46,15 @@ class GymScheduleExpandableListAdapter(private val context: Context,
         }
 
         val headerCheckbox = _convertView!!.findViewById<CheckBox>(R.id.list_header_checkbox)
-        headerCheckbox.isChecked = true //presenter.isEventCategoryChecked(eventType)
-        headerCheckbox.setOnClickListener { _ -> } //presenter.onEventCategoryToggled(eventType, headerCheckbox.isChecked) }
+        eventTypeStateInteractor.getEventTypeMapPublishSubject()
+                .subscribe {
+                    Log.d(TAG, "received event state list, updating checkbox")
+                    headerCheckbox.isChecked = it.getOrDefault(eventType.eventTypeId, false)
+                }
+        headerCheckbox.setOnClickListener { _ ->
+            Log.d(TAG, "updating event type state")
+            eventTypeStateInteractor.updateEventTypeState(eventType, headerCheckbox.isChecked)
+        }
         _convertView.findViewById<TextView>(R.id.list_header_text).text = eventType.eventName
 
         return _convertView

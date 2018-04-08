@@ -3,7 +3,7 @@ package dave.gymschedule
 import android.app.Application
 import dave.gymschedule.di.DaggerGymScheduleComponent
 import dave.gymschedule.di.GymScheduleComponent
-import dave.gymschedule.di.GymScheduleModule
+import dave.gymschedule.di.AppModule
 
 class GymScheduleApplication : Application() {
 
@@ -15,7 +15,7 @@ class GymScheduleApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         graph = DaggerGymScheduleComponent.builder()
-                .gymScheduleModule(GymScheduleModule(this))
+                .appModule(AppModule(this))
                 .build()
         graph.inject(this)
     }

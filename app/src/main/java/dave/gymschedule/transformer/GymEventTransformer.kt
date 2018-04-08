@@ -31,7 +31,7 @@ class GymEventTransformer {
         val classesArray = rootJson.getJSONArray("classes")
         val innerClasses = classesArray.getJSONObject(0)
         val allClassesArray = innerClasses.getJSONArray("classes")
-        Log.d(TAG, "classes list: " + allClassesArray.toString(2))
+//        Log.d(TAG, "classes list: " + allClassesArray.toString(2))
 
         return allClassesArray
     }
@@ -54,7 +54,7 @@ class GymEventTransformer {
         val details = jsonObject.getString("titleDetail")
         val startTime = jsonObject.getString("startTime")
         val endTime = jsonObject.getString("endTime")
-        Log.d(TAG, "name=$name, eventTypeId=$eventTypeId, category=${EventType.getEventTypeFromId(eventTypeId)}")
+//        Log.d(TAG, "name=$name, eventTypeId=$eventTypeId, category=${EventType.getEventTypeFromId(eventTypeId)}")
         return GymEvent(name, EventType.getEventTypeFromId(eventTypeId), details, startTime, endTime)
     }
 }
