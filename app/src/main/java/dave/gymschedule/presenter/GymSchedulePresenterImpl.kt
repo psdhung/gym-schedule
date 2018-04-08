@@ -38,11 +38,9 @@ class GymSchedulePresenterImpl(private var view: GymScheduleView?) : GymSchedule
     }
 
     override fun onViewCreated(date: Calendar) {
-        Log.d(TAG, "[${date.time}] getting schedule for date: ${date.time}")
         this.date = date
         eventTypeStateInteractor.getEventTypeMapPublishSubject()
                 .subscribe { _ ->
-                    Log.d(TAG, "[${date.time}] onViewCreated, received event states, getting gym events for date")
                     getGymEventForDate()
                 }
     }
@@ -83,12 +81,10 @@ class GymSchedulePresenterImpl(private var view: GymScheduleView?) : GymSchedule
 
     private fun getVisibleEvents(gymEvents: List<GymEvent>): Observable<List<GymEvent>> {
         if (!eventTypeStateInteractor.anyEventTypesChecked()) {
-            Log.d(TAG, "[${date.time}] no events checked, returning unmodified gym event list")
             return Observable.just(gymEvents)
         }
         return eventTypeStateInteractor.getEventTypeMapPublishSubject()
                 .map { eventTypeMap ->
-                    Log.d(TAG, "[${date.time}] got event states, filtering gym event list")
                     gymEvents.filter { eventTypeMap[it.eventType.eventTypeId] ?: false }
                 }
     }

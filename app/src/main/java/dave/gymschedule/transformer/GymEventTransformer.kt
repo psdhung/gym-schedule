@@ -15,15 +15,13 @@ class GymEventTransformer {
     }
 
     fun getGymEventsFromJson(json: JSONObject): List<GymEvent> {
-        val GymEvents: List<GymEvent> = try {
+        return try {
             val allClasses = getAllClassesArray(json)
             getGymEventsFromArray(allClasses)
         } catch (exception: JSONException) {
             Log.d(TAG, "error while parsing JSON", exception)
             ArrayList()
         }
-
-        return GymEvents
     }
 
     @Throws(JSONException::class)

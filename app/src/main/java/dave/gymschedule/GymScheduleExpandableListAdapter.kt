@@ -1,7 +1,6 @@
 package dave.gymschedule
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,7 @@ class GymScheduleExpandableListAdapter(private val context: Context,
                                        private val children: List<String>) : BaseExpandableListAdapter() {
 
     companion object {
-        private val TAG =  GymScheduleExpandableListAdapter::class.java.simpleName
+        private val TAG = GymScheduleExpandableListAdapter::class.java.simpleName
     }
 
     @Inject
@@ -40,24 +39,22 @@ class GymScheduleExpandableListAdapter(private val context: Context,
     }
 
     override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
-        var _convertView = convertView
-        if (_convertView == null) {
-            _convertView = LayoutInflater.from(context).inflate(R.layout.list_header, null)
+        var updatedConvertView = convertView
+        if (updatedConvertView == null) {
+            updatedConvertView = LayoutInflater.from(context).inflate(R.layout.list_header, null)
         }
 
-        val headerCheckbox = _convertView!!.findViewById<CheckBox>(R.id.list_header_checkbox)
+        val headerCheckbox = updatedConvertView!!.findViewById<CheckBox>(R.id.list_header_checkbox)
         eventTypeStateInteractor.getEventTypeMapPublishSubject()
                 .subscribe {
-                    Log.d(TAG, "received event state list, updating checkbox")
                     headerCheckbox.isChecked = it.getOrDefault(eventType.eventTypeId, false)
                 }
         headerCheckbox.setOnClickListener { _ ->
-            Log.d(TAG, "updating event type state")
             eventTypeStateInteractor.updateEventTypeState(eventType, headerCheckbox.isChecked)
         }
-        _convertView.findViewById<TextView>(R.id.list_header_text).text = eventType.eventName
+        updatedConvertView.findViewById<TextView>(R.id.list_header_text).text = eventType.eventName
 
-        return _convertView
+        return updatedConvertView
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): Any {
@@ -74,15 +71,15 @@ class GymScheduleExpandableListAdapter(private val context: Context,
 
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean,
                               convertView: View?, parent: ViewGroup?): View {
-        var _convertView = convertView
-        if (_convertView == null) {
-            _convertView = LayoutInflater.from(context).inflate(R.layout.list_item, null)
+        var updatedConvertView = convertView
+        if (updatedConvertView == null) {
+            updatedConvertView = LayoutInflater.from(context).inflate(R.layout.list_item, null)
         }
 
-        _convertView!!.findViewById<CheckBox>(R.id.list_item_checkbox).isChecked = false
-        _convertView.findViewById<TextView>(R.id.list_item_text).text = children[childPosition]
+        updatedConvertView!!.findViewById<CheckBox>(R.id.list_item_checkbox).isChecked = false
+        updatedConvertView.findViewById<TextView>(R.id.list_item_text).text = children[childPosition]
 
-        return _convertView
+        return updatedConvertView
     }
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {

@@ -14,15 +14,11 @@ class GymEventAdapter(gymEvents: List<GymEvent>) : RecyclerView.Adapter<GymEvent
         private const val LANE_SWIM_NAME = "Lane Swim"
     }
 
-    private val gymEvents: List<GymEvent>
+    private val gymEvents: List<GymEvent> = ArrayList(gymEvents)
 
     class GymEventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var view: View = itemView
 
-    }
-
-    init {
-        this.gymEvents = ArrayList(gymEvents)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GymEventViewHolder {
@@ -48,7 +44,7 @@ class GymEventAdapter(gymEvents: List<GymEvent>) : RecyclerView.Adapter<GymEvent
         (holder.view.findViewById<View>(R.id.end_time) as TextView).text = event.endTime
 
         if (LANE_SWIM_NAME.equals(event.name, ignoreCase = true)) {
-            holder.view.setBackgroundResource(R.drawable.bg_lane_swim)
+            holder.view.setBackgroundResource(R.drawable.bg_highlighted_event)
         } else {
             holder.view.background = null
         }
@@ -57,7 +53,5 @@ class GymEventAdapter(gymEvents: List<GymEvent>) : RecyclerView.Adapter<GymEvent
     override fun getItemCount(): Int {
         return gymEvents.size
     }
-
-
 
 }

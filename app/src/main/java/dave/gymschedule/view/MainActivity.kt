@@ -15,6 +15,8 @@ import java.util.Calendar
 open class MainActivity : BaseActivity() {
     companion object {
         private val TAG = MainActivity::class.java.simpleName
+
+        private const val MAX_DAYS = 7
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,10 +24,8 @@ open class MainActivity : BaseActivity() {
         GymScheduleApplication.graph.inject(this)
 
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        schedule_pager.adapter = SchedulePagerAdapter(supportFragmentManager, Calendar.getInstance(), 7)
+        schedule_pager.adapter = SchedulePagerAdapter(supportFragmentManager, Calendar.getInstance(), MAX_DAYS)
 
         setUpActivityDropdown()
     }
@@ -36,22 +36,6 @@ open class MainActivity : BaseActivity() {
                 EventType.POOL_ACTIVITIES, listOf("Aquafit", "Swim lessions", "drop-in time", "clubs and teams")))
         val screenWidth = windowManager.defaultDisplay.width
         pool_expandable_list_view.setIndicatorBoundsRelative(screenWidth - 100, screenWidth)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
 }
