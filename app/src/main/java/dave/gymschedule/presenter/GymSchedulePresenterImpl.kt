@@ -20,7 +20,7 @@ class GymSchedulePresenterImpl(private var view: GymScheduleView?) : GymSchedule
     companion object {
         private val TAG = GymSchedulePresenterImpl::class.java.simpleName
 
-        private val DISPLAYED_DATE_FORMAT = SimpleDateFormat("MMM dd, YYYY", Locale.getDefault())
+        private val DISPLAYED_DATE_FORMAT = SimpleDateFormat("EEEE MMM dd, YYYY", Locale.getDefault())
     }
 
     @Inject
