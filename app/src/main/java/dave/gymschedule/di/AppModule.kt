@@ -1,12 +1,12 @@
 package dave.gymschedule.di
 
+import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import dagger.Module
 import dagger.Provides
-import dave.gymschedule.GymScheduleApplication
 import dave.gymschedule.database.AppDatabase
 import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.interactor.EventTypeStateInteractorImpl
@@ -23,7 +23,7 @@ class AppModule {
     @Provides
     @Singleton
     @ApplicationContext
-    fun provideApplicationContext(application: GymScheduleApplication): Context = application.applicationContext
+    fun provideApplicationContext(application: Application): Context = application.applicationContext
 
     @Provides
     @Singleton

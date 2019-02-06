@@ -1,9 +1,11 @@
 package dave.gymschedule.di
 
+import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import dave.gymschedule.GymScheduleApplication
+import dagger.android.support.DaggerApplication
 import javax.inject.Singleton
 
 @Singleton
@@ -12,16 +14,16 @@ import javax.inject.Singleton
     AppModule::class,
     BuildersModule::class
 ])
-interface AppComponent {
+interface AppComponent : AndroidInjector<DaggerApplication> {
 
     @Component.Builder
     interface Builder {
 
         @BindsInstance
-        fun application(application: GymScheduleApplication): Builder
+        fun application(application: Application): Builder
 
         fun build(): AppComponent
     }
 
-    fun inject(application: GymScheduleApplication)
+    override fun inject(application: DaggerApplication)
 }

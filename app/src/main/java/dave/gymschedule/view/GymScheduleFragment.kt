@@ -1,15 +1,13 @@
 package dave.gymschedule.view
 
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.R
 import dave.gymschedule.model.GymEvent
@@ -22,7 +20,7 @@ import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
-class GymScheduleFragment : Fragment(), GymScheduleView {
+class GymScheduleFragment : DaggerFragment(), GymScheduleView {
 
     companion object {
         private const val TAG = "GymScheduleFragment"
@@ -36,11 +34,6 @@ class GymScheduleFragment : Fragment(), GymScheduleView {
     private lateinit var date: Calendar
 
     private val disposables = CompositeDisposable()
-
-    override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         date = Calendar.getInstance()
