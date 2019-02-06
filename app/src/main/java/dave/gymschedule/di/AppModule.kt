@@ -12,16 +12,18 @@ import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.interactor.EventTypeStateInteractorImpl
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.interactor.GymScheduleInteractorImpl
+import dave.gymschedule.presenter.GymSchedulePresenter
+import dave.gymschedule.presenter.GymSchedulePresenterImpl
 import dave.gymschedule.transformer.GymEventTransformer
 import javax.inject.Singleton
 
 @Module
-class AppModule(private val application: GymScheduleApplication) {
+class AppModule {
 
     @Provides
     @Singleton
     @ApplicationContext
-    fun provideApplicationContext(): Context = application
+    fun provideApplicationContext(application: GymScheduleApplication): Context = application.applicationContext
 
     @Provides
     @Singleton
@@ -39,6 +41,12 @@ class AppModule(private val application: GymScheduleApplication) {
     @Singleton
     fun providesGymEventTransformer(): GymEventTransformer {
         return GymEventTransformer()
+    }
+
+    @Provides
+    @Singleton
+    fun providesGymSchedulePresenter(scheduleInteractor: GymScheduleInteractor, eventTypeStateInteractor: EventTypeStateInteractor): GymSchedulePresenter {
+        return GymSchedulePresenterImpl(scheduleInteractor, eventTypeStateInteractor)
     }
 
     @Provides

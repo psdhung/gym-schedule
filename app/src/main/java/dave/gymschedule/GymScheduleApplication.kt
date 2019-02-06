@@ -1,22 +1,37 @@
 package dave.gymschedule
 
+import android.app.Activity
 import android.app.Application
-import dave.gymschedule.di.DaggerGymScheduleComponent
-import dave.gymschedule.di.GymScheduleComponent
-import dave.gymschedule.di.AppModule
+import android.app.Fragment
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import dagger.android.HasFragmentInjector
+import dave.gymschedule.di.DaggerAppComponent
+import javax.inject.Inject
 
-class GymScheduleApplication : Application() {
+class GymScheduleApplication : Application(), HasActivityInjector, HasFragmentInjector {
 
-    companion object {
-        @JvmStatic
-        lateinit var graph: GymScheduleComponent
-    }
+    @Inject
+    lateinit var dispatchingAndroidActivityInjector: DispatchingAndroidInjector<Activity>
+
+    @Inject
+    lateinit var dispatchingAndroidFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun onCreate() {
         super.onCreate()
-        graph = DaggerGymScheduleComponent.builder()
-                .appModule(AppModule(this))
+
+        DaggerAppComponent.builder()
+                .application(this)
                 .build()
-        graph.inject(this)
+                .inject(this)
+    }
+
+    override fun activityInjector(): AndroidInjector<Activity> {
+        return dispatchingAndroidActivityInjector
+    }
+
+    override fun fragmentInjector(): AndroidInjector<Fragment> {
+        return dispatchingAndroidFragmentInjector
     }
 }

@@ -6,11 +6,6 @@
     android:orientation="vertical"
     tools:context="dave.gymschedule.view.MainActivity">
 
-    <ExpandableListView
-        android:id="@+id/pool_expandable_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
