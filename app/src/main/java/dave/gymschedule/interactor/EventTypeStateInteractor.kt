@@ -4,7 +4,6 @@ import android.util.Log
 import dave.gymschedule.database.AppDatabase
 import dave.gymschedule.database.EventTypeState
 import dave.gymschedule.model.EventType
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -25,9 +24,7 @@ class EventTypeStateInteractorImpl(private val database: AppDatabase) : EventTyp
     private val eventTypeStatesPublisher: BehaviorSubject<MutableMap<Int, Boolean>> = BehaviorSubject.create()
 
     init {
-        Single.create<List<EventTypeState>> { emitter ->
-            emitter.onSuccess(database.eventTypeStateDao().getAllEventTypeStates())
-        }
+        database.eventTypeStateDao().getAllEventTypeStates()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { eventStates ->
@@ -48,12 +45,10 @@ class EventTypeStateInteractorImpl(private val database: AppDatabase) : EventTyp
 
     override fun updateEventTypeState(eventType: EventType, checked: Boolean) {
         Log.d(TAG, "got updating list, id=${eventType.eventTypeId}, checked=$checked")
-        Single.create<Unit> { emitter ->
-            database.eventTypeStateDao().updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
-            emitter.onSuccess(Unit)
-        }
+
+        database.eventTypeStateDao().updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
                 .subscribeOn(Schedulers.io())
-                .subscribe { _ -> Log.d(TAG, "finished updating database") }
+                .subscribe { Log.d(TAG, "finished updating database") }
 
         eventTypeStates[eventType.eventTypeId] = checked
         Log.d(TAG, "updateEventTypeState(), publishing event states")

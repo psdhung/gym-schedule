@@ -1,8 +1,8 @@
 package dave.gymschedule.di
 
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.content.Context
+import androidx.room.Room
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import dagger.Module
