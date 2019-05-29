@@ -1,5 +1,6 @@
 package dave.gymschedule.interactor
 
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -16,6 +17,7 @@ interface GymScheduleInteractor {
 class GymScheduleInteractorImpl(private val requestQueue: RequestQueue,
                                 private val transformer: GymEventTransformer) : GymScheduleInteractor {
     companion object {
+        private val TAG = GymScheduleInteractorImpl::class.java.simpleName
         private const val SCHEDULE_REQUEST_URL = "https://api.ymcagta.org/api/Classes/GetByCentreId?centreId=39&startDateTime=%1\$s+12:00:00+AM&endDateTime=%1\$s+11:59:59+PM"
     }
 
@@ -24,6 +26,7 @@ class GymScheduleInteractorImpl(private val requestQueue: RequestQueue,
     override fun getGymEventsSingle(date: Calendar): Single<List<GymEvent>> {
         val key = date.timeInMillis
         if (gymEventsMap.contains(key)) {
+            Log.d(TAG, "memory cache hit for date ${date.time}, returning cached events")
             return Single.just(gymEventsMap[key])
         }
 

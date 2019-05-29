@@ -48,8 +48,8 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "onViewCreated for date ${date.time}")
-        gym_events_recycler_view.layoutManager = LinearLayoutManager(activity)
-        gym_events_recycler_view.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+        gym_events_recycler_view?.layoutManager = LinearLayoutManager(activity)
+        gym_events_recycler_view?.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
         hideErrorMessage()
         showLoadingIndicator()
@@ -69,28 +69,28 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
     }
 
     override fun setDate(date: String) {
-        date_text.text = date
+        date_text?.text = date
     }
 
     override fun updateSchedule(gymEvents: List<GymEvent>) {
-        gym_events_recycler_view.adapter = GymEventAdapter(gymEvents)
+        gym_events_recycler_view?.adapter = GymEventAdapter(gymEvents)
     }
 
     override fun showErrorMessage(errorMessage: String, error: Throwable) {
-        error_text.text = String.format("%s\n\n%s", errorMessage, error.message)
-        error_text.visibility = View.VISIBLE
+        error_text?.text = String.format("%s\n\n%s", errorMessage, error.message)
+        error_text?.visibility = View.VISIBLE
     }
 
     override fun hideErrorMessage() {
-        error_text.visibility = View.INVISIBLE
+        error_text?.visibility = View.INVISIBLE
     }
 
     override fun showLoadingIndicator() {
-        loading_text.visibility = View.VISIBLE
+        loading_text?.visibility = View.VISIBLE
     }
 
     override fun hideLoadingIndicator() {
-        loading_text.visibility = View.INVISIBLE
+        loading_text?.visibility = View.INVISIBLE
     }
 
     override fun onDestroy() {
