@@ -4,21 +4,20 @@ import android.os.Bundle
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
 import dave.gymschedule.SchedulePagerAdapter
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.Calendar
+import kotlinx.android.synthetic.main.activity_gym_schedule.*
+import java.util.*
 
-open class MainActivity : DaggerAppCompatActivity() {
+class GymScheduleActivity : DaggerAppCompatActivity() {
+
     companion object {
-        private val TAG = MainActivity::class.java.simpleName
+        private val TAG = SplashScreenActivity::class.java.simpleName
 
         private const val MAX_DAYS = 7
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
-
+        setContentView(R.layout.activity_gym_schedule)
         schedule_pager.adapter = SchedulePagerAdapter(supportFragmentManager, Calendar.getInstance(), MAX_DAYS)
     }
 

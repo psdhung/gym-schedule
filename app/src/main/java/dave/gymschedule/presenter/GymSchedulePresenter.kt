@@ -25,12 +25,13 @@ class GymSchedulePresenterImpl(private val scheduleInteractor: GymScheduleIntera
     }
 
     private fun getVisibleEvents(gymEvents: List<GymEvent>): Observable<List<GymEvent>> {
-        if (!eventTypeStateInteractor.anyEventTypesChecked()) {
-            return Observable.just(gymEvents)
+        return if (eventTypeStateInteractor.anyEventTypesChecked()) {
+            eventTypeStateInteractor.getEventTypeMapPublishSubject()
+                    .map { eventTypeMap ->
+                        gymEvents.filter { eventTypeMap[it.eventType.eventTypeId] ?: false }
+                    }
+        } else {
+            Observable.just(gymEvents)
         }
-        return eventTypeStateInteractor.getEventTypeMapPublishSubject()
-                .map { eventTypeMap ->
-                    gymEvents.filter { eventTypeMap[it.eventType.eventTypeId] ?: false }
-                }
     }
 }

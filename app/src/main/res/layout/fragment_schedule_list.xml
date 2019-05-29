@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="dave.gymschedule.view.MainActivity">
+    tools:context="dave.gymschedule.view.SplashScreenActivity">
 
     <TextView
         android:id="@+id/date_text"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/loading_text"
+        android:text="@string/schedule_loading_text"
         android:textSize="@dimen/loading_text_size"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

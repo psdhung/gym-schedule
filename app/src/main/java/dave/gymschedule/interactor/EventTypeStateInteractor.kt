@@ -4,13 +4,13 @@ import android.util.Log
 import dave.gymschedule.database.AppDatabase
 import dave.gymschedule.database.EventTypeState
 import dave.gymschedule.model.EventType
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Completable
 import io.reactivex.subjects.BehaviorSubject
 
 interface EventTypeStateInteractor {
+    fun initialize(): Completable
     fun getEventTypeMapPublishSubject(): BehaviorSubject<MutableMap<Int, Boolean>>
-    fun updateEventTypeState(eventType: EventType, checked: Boolean)
+    fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable
     fun anyEventTypesChecked(): Boolean
 }
 
@@ -23,11 +23,9 @@ class EventTypeStateInteractorImpl(private val database: AppDatabase) : EventTyp
     private val eventTypeStates: MutableMap<Int, Boolean> = HashMap()
     private val eventTypeStatesPublisher: BehaviorSubject<MutableMap<Int, Boolean>> = BehaviorSubject.create()
 
-    init {
-        database.eventTypeStateDao().getAllEventTypeStates()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { eventStates ->
+    override fun initialize(): Completable {
+        return database.eventTypeStateDao().getAllEventTypeStates()
+                .map { eventStates ->
                     Log.d(TAG, "got list, size=${eventStates.size}")
                     eventStates.forEach {
                         Log.d(TAG, "type=${it.eventTypeId}, checked=${it.checked}")
@@ -37,22 +35,23 @@ class EventTypeStateInteractorImpl(private val database: AppDatabase) : EventTyp
                     Log.d(TAG, "constructor, publishing event states")
                     eventTypeStatesPublisher.onNext(eventTypeStates)
                 }
+                .toCompletable()
     }
 
     override fun getEventTypeMapPublishSubject(): BehaviorSubject<MutableMap<Int, Boolean>> {
         return eventTypeStatesPublisher
     }
 
-    override fun updateEventTypeState(eventType: EventType, checked: Boolean) {
-        Log.d(TAG, "got updating list, id=${eventType.eventTypeId}, checked=$checked")
+    override fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable {
+        Log.d(TAG, "updating list, id=${eventType.eventTypeId}, checked=$checked")
 
-        database.eventTypeStateDao().updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
-                .subscribeOn(Schedulers.io())
-                .subscribe { Log.d(TAG, "finished updating database") }
-
-        eventTypeStates[eventType.eventTypeId] = checked
-        Log.d(TAG, "updateEventTypeState(), publishing event states")
-        eventTypeStatesPublisher.onNext(eventTypeStates)
+        return database.eventTypeStateDao().updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
+                .doOnComplete {
+                    Log.d(TAG, "finished updating database")
+                    eventTypeStates[eventType.eventTypeId] = checked
+                    Log.d(TAG, "updateEventTypeState(), publishing event states")
+                    eventTypeStatesPublisher.onNext(eventTypeStates)
+                }
     }
 
     override fun anyEventTypesChecked(): Boolean {

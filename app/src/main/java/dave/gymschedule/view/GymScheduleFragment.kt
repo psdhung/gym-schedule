@@ -1,12 +1,12 @@
 package dave.gymschedule.view
 
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.DaggerFragment
 import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.R
@@ -47,6 +47,7 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d(TAG, "onViewCreated for date ${date.time}")
         gym_events_recycler_view.layoutManager = LinearLayoutManager(activity)
         gym_events_recycler_view.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
@@ -56,6 +57,7 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
         setDate(DISPLAYED_DATE_FORMAT.format(date.time))
         disposables.add(presenter.getGymEventsForDate(date)
                 .subscribe({ visibleEvents ->
+                    Log.d(TAG, "got events for date ${date.time}, revealing page")
                     updateSchedule(visibleEvents)
                     hideLoadingIndicator()
                 }, { error ->
@@ -91,8 +93,8 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
         loading_text.visibility = View.INVISIBLE
     }
 
-    override fun onDestroyView() {
+    override fun onDestroy() {
         disposables.dispose()
-        super.onDestroyView()
+        super.onDestroy()
     }
 }
