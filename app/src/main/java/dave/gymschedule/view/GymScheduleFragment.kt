@@ -1,12 +1,13 @@
 package dave.gymschedule.view
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerFragment
 import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.R
@@ -41,15 +42,19 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
         bundle?.let {
             date.timeInMillis = bundle.getLong(DATE_KEY)
         }
-        return inflater.inflate(R.layout.fragment_schedule_list, null)
+        return inflater.inflate(R.layout.fragment_schedule_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "onViewCreated for date ${date.time}")
-        gym_events_recycler_view?.layoutManager = LinearLayoutManager(activity)
-        gym_events_recycler_view?.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+        gym_events_recycler_view?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        gym_events_recycler_view?.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                outRect.set(10, 10, 10, 10)
+            }
+        })
 
         hideErrorMessage()
         showLoadingIndicator()
