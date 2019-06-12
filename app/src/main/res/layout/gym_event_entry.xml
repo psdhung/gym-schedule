@@ -36,13 +36,22 @@
                 tools:text="really really really really long name" />
 
             <TextView
-                android:id="@+id/event_details"
+            android:id="@+id/event_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="false"
+            android:textSize="@dimen/details_text_size"
+            android:textColor="@color/event_subheading_text_color"
+            tools:text="really really really really long details" />
+
+            <TextView
+                android:id="@+id/event_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollHorizontally="false"
                 android:textSize="@dimen/details_text_size"
-                android:textColor="@color/event_details_text_color"
-                tools:text="really really really really long details" />
+                android:textColor="@color/event_subheading_text_color"
+                tools:text="really really really really long location" />
         </LinearLayout>
 
         <LinearLayout

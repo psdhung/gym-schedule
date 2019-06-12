@@ -74,7 +74,7 @@ class GymScheduleFragment : DaggerFragment() {
     }
 
     private fun updateSchedule(gymEvents: List<GymEventViewModel>) {
-        gym_events_recycler_view?.adapter = GymEventAdapter(requireContext(), gymEvents)
+        gym_events_recycler_view?.adapter = GymEventAdapter(gymEvents)
     }
 
     private fun showErrorMessage(errorMessage: String, error: Throwable) {
