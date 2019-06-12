@@ -7,23 +7,16 @@ import dave.gymschedule.model.EventType
 import io.reactivex.Completable
 import io.reactivex.subjects.BehaviorSubject
 
-interface EventTypeStateInteractor {
-    fun initialize(): Completable
-    fun getEventTypeMapPublishSubject(): BehaviorSubject<MutableMap<Int, Boolean>>
-    fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable
-    fun anyEventTypesChecked(): Boolean
-}
-
-class EventTypeStateInteractorImpl(private val database: AppDatabase) : EventTypeStateInteractor {
+class EventTypeStateInteractor(private val database: AppDatabase) {
 
     companion object {
-        private val TAG = EventTypeStateInteractorImpl::class.java.simpleName
+        private val TAG = EventTypeStateInteractor::class.java.simpleName
     }
 
     private val eventTypeStates: MutableMap<Int, Boolean> = HashMap()
     private val eventTypeStatesPublisher: BehaviorSubject<MutableMap<Int, Boolean>> = BehaviorSubject.create()
 
-    override fun initialize(): Completable {
+    fun initialize(): Completable {
         return database.eventTypeStateDao().getAllEventTypeStates()
                 .map { eventStates ->
                     Log.d(TAG, "got list, size=${eventStates.size}")
@@ -38,11 +31,11 @@ class EventTypeStateInteractorImpl(private val database: AppDatabase) : EventTyp
                 .toCompletable()
     }
 
-    override fun getEventTypeMapPublishSubject(): BehaviorSubject<MutableMap<Int, Boolean>> {
+    fun getEventTypeMapPublishSubject(): BehaviorSubject<MutableMap<Int, Boolean>> {
         return eventTypeStatesPublisher
     }
 
-    override fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable {
+    fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable {
         Log.d(TAG, "updating list, id=${eventType.eventTypeId}, checked=$checked")
 
         return database.eventTypeStateDao().updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
@@ -54,7 +47,7 @@ class EventTypeStateInteractorImpl(private val database: AppDatabase) : EventTyp
                 }
     }
 
-    override fun anyEventTypesChecked(): Boolean {
+    fun anyEventTypesChecked(): Boolean {
         return eventTypeStates.values.any { it }
     }
 

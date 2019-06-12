@@ -8,14 +8,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.Calendar
 
-interface GymSchedulePresenter {
-    fun getGymEventsForDate(date: Calendar): Observable<List<GymEvent>>
-}
+class GymSchedulePresenter(private val scheduleInteractor: GymScheduleInteractor,
+                               private val eventTypeStateInteractor: EventTypeStateInteractor) {
 
-class GymSchedulePresenterImpl(private val scheduleInteractor: GymScheduleInteractor,
-                               private val eventTypeStateInteractor: EventTypeStateInteractor) : GymSchedulePresenter {
-
-    override fun getGymEventsForDate(date: Calendar): Observable<List<GymEvent>> {
+    fun getGymEventsForDate(date: Calendar): Observable<List<GymEvent>> {
         return scheduleInteractor.getGymEventsSingle(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

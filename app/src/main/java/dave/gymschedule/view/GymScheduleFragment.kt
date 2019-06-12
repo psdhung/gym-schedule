@@ -21,7 +21,7 @@ import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
-class GymScheduleFragment : DaggerFragment(), GymScheduleView {
+class GymScheduleFragment : DaggerFragment() {
 
     companion object {
         private const val TAG = "GymScheduleFragment"
@@ -56,10 +56,10 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
             }
         })
 
-        hideErrorMessage()
-        showLoadingIndicator()
+        error_text?.visibility = View.INVISIBLE
+        loading_text?.visibility = View.VISIBLE
         updateSchedule(ArrayList())
-        setDate(DISPLAYED_DATE_FORMAT.format(date.time))
+        date_text?.text = DISPLAYED_DATE_FORMAT.format(date.time)
         disposables.add(presenter.getGymEventsForDate(date)
                 .subscribe({ visibleEvents ->
                     Log.d(TAG, "got events for date ${date.time}, revealing page")
@@ -73,28 +73,16 @@ class GymScheduleFragment : DaggerFragment(), GymScheduleView {
         )
     }
 
-    override fun setDate(date: String) {
-        date_text?.text = date
-    }
-
-    override fun updateSchedule(gymEvents: List<GymEvent>) {
+    private fun updateSchedule(gymEvents: List<GymEvent>) {
         gym_events_recycler_view?.adapter = GymEventAdapter(gymEvents)
     }
 
-    override fun showErrorMessage(errorMessage: String, error: Throwable) {
+    private fun showErrorMessage(errorMessage: String, error: Throwable) {
         error_text?.text = String.format("%s\n\n%s", errorMessage, error.message)
         error_text?.visibility = View.VISIBLE
     }
 
-    override fun hideErrorMessage() {
-        error_text?.visibility = View.INVISIBLE
-    }
-
-    override fun showLoadingIndicator() {
-        loading_text?.visibility = View.VISIBLE
-    }
-
-    override fun hideLoadingIndicator() {
+    private fun hideLoadingIndicator() {
         loading_text?.visibility = View.INVISIBLE
     }
 

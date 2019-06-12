@@ -9,11 +9,8 @@ import dagger.Module
 import dagger.Provides
 import dave.gymschedule.database.AppDatabase
 import dave.gymschedule.interactor.EventTypeStateInteractor
-import dave.gymschedule.interactor.EventTypeStateInteractorImpl
 import dave.gymschedule.interactor.GymScheduleInteractor
-import dave.gymschedule.interactor.GymScheduleInteractorImpl
 import dave.gymschedule.presenter.GymSchedulePresenter
-import dave.gymschedule.presenter.GymSchedulePresenterImpl
 import dave.gymschedule.transformer.GymEventTransformer
 import javax.inject.Singleton
 
@@ -46,19 +43,19 @@ class AppModule {
     @Provides
     @Singleton
     fun providesGymSchedulePresenter(scheduleInteractor: GymScheduleInteractor, eventTypeStateInteractor: EventTypeStateInteractor): GymSchedulePresenter {
-        return GymSchedulePresenterImpl(scheduleInteractor, eventTypeStateInteractor)
+        return GymSchedulePresenter(scheduleInteractor, eventTypeStateInteractor)
     }
 
     @Provides
     @Singleton
     fun providesGymScheduleInteractor(requestQueue: RequestQueue, transformer: GymEventTransformer): GymScheduleInteractor {
-        return GymScheduleInteractorImpl(requestQueue, transformer)
+        return GymScheduleInteractor(requestQueue, transformer)
     }
 
     @Provides
     @Singleton
     fun providesEventTypeStateInteractor(appDatabase: AppDatabase): EventTypeStateInteractor {
-        return EventTypeStateInteractorImpl(appDatabase)
+        return EventTypeStateInteractor(appDatabase)
     }
 
 }

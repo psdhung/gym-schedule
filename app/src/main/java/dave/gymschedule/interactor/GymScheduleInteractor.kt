@@ -8,22 +8,20 @@ import com.android.volley.toolbox.JsonObjectRequest
 import dave.gymschedule.model.GymEvent
 import dave.gymschedule.transformer.GymEventTransformer
 import io.reactivex.Single
-import java.util.*
+import java.util.Calendar
+import java.util.HashMap
+import java.util.Locale
 
-interface GymScheduleInteractor {
-    fun getGymEventsSingle(date: Calendar): Single<List<GymEvent>>
-}
-
-class GymScheduleInteractorImpl(private val requestQueue: RequestQueue,
-                                private val transformer: GymEventTransformer) : GymScheduleInteractor {
+class GymScheduleInteractor(private val requestQueue: RequestQueue,
+                            private val transformer: GymEventTransformer) {
     companion object {
-        private val TAG = GymScheduleInteractorImpl::class.java.simpleName
+        private val TAG = GymScheduleInteractor::class.java.simpleName
         private const val SCHEDULE_REQUEST_URL = "https://api.ymcagta.org/api/Classes/GetByCentreId?centreId=39&startDateTime=%1\$s+12:00:00+AM&endDateTime=%1\$s+11:59:59+PM"
     }
 
     private val gymEventsMap: MutableMap<Long, List<GymEvent>> = HashMap()
 
-    override fun getGymEventsSingle(date: Calendar): Single<List<GymEvent>> {
+    fun getGymEventsSingle(date: Calendar): Single<List<GymEvent>> {
         val key = date.timeInMillis
         if (gymEventsMap.contains(key)) {
             Log.d(TAG, "memory cache hit for date ${date.time}, returning cached events")
