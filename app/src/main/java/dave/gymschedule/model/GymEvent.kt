@@ -1,7 +1,18 @@
 package dave.gymschedule.model
 
-data class GymEvent(val name: String,
-                    val eventType: EventType,
-                    val details: String,
-                    val startTime: String,
-                    val endTime: String)
+import com.google.gson.annotations.SerializedName
+
+data class GymEvent(
+        @SerializedName("className")
+        val name: String,
+        @SerializedName("classTypeId")
+        val eventType: Int,
+        @SerializedName("titleDetail")
+        val details: String?,
+        @SerializedName("startTime")
+        val startTime: String,
+        @SerializedName("endTime")
+        val endTime: String,
+        @SerializedName("room")
+        val location: String
+)

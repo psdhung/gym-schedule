@@ -1,33 +1,14 @@
 package dave.gymschedule.presenter
 
-import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.interactor.GymScheduleInteractor
-import dave.gymschedule.model.GymEvent
+import dave.gymschedule.model.GymEventViewModel
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.util.Calendar
 
-class GymSchedulePresenter(private val scheduleInteractor: GymScheduleInteractor,
-                               private val eventTypeStateInteractor: EventTypeStateInteractor) {
+class GymSchedulePresenter(private val gymScheduleInteractor: GymScheduleInteractor) {
 
-    fun getGymEventsForDate(date: Calendar): Observable<List<GymEvent>> {
-        return scheduleInteractor.getGymEventsSingle(date)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMapObservable { receivedGymEvents ->
-                    getVisibleEvents(receivedGymEvents)
-                }
+    fun getGymEventsForDate(date: Calendar): Observable<List<GymEventViewModel>> {
+        return gymScheduleInteractor.getGymEventViewModelsObservable(date)
     }
 
-    private fun getVisibleEvents(gymEvents: List<GymEvent>): Observable<List<GymEvent>> {
-        return if (eventTypeStateInteractor.anyEventTypesChecked()) {
-            eventTypeStateInteractor.getEventTypeMapPublishSubject()
-                    .map { eventTypeMap ->
-                        gymEvents.filter { eventTypeMap[it.eventType.eventTypeId] ?: false }
-                    }
-        } else {
-            Observable.just(gymEvents)
-        }
-    }
 }

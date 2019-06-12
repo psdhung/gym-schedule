@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
-import dave.gymschedule.interactor.EventTypeStateInteractor
+import dave.gymschedule.repository.EventTypeStateRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -18,7 +18,7 @@ open class SplashScreenActivity : DaggerAppCompatActivity() {
     }
 
     @Inject
-    lateinit var eventTypeStateInteractor: EventTypeStateInteractor
+    lateinit var eventTypeStateRepository: EventTypeStateRepository
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
@@ -27,7 +27,7 @@ open class SplashScreenActivity : DaggerAppCompatActivity() {
 
         setContentView(R.layout.activity_splash_screen)
 
-        disposables.add(eventTypeStateInteractor.initialize()
+        disposables.add(eventTypeStateRepository.initialize()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

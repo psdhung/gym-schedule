@@ -6,7 +6,7 @@ enum class EventType(val eventName: String, val eventTypeId: Int) {
 
     companion object {
         fun getEventTypeFromId(id: Int) : EventType {
-            for (category in EventType.values()) {
+            for (category in values()) {
                 if (category.eventTypeId == id) {
                     return category
                 }

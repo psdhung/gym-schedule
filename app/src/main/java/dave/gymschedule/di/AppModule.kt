@@ -3,15 +3,18 @@ package dave.gymschedule.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
 import dagger.Module
 import dagger.Provides
 import dave.gymschedule.database.AppDatabase
-import dave.gymschedule.interactor.EventTypeStateInteractor
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.presenter.GymSchedulePresenter
-import dave.gymschedule.transformer.GymEventTransformer
+import dave.gymschedule.repository.EventTypeStateRepository
+import dave.gymschedule.repository.GymScheduleRepository
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -24,8 +27,20 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesRequestQueue(@ApplicationContext context: Context): RequestQueue {
-        return Volley.newRequestQueue(context)
+    fun providesRetrofit(): Retrofit {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val client = OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build()
+
+        return Retrofit.Builder()
+                .client(client)
+                .baseUrl("https://api.ymcagta.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
     }
 
     @Provides
@@ -36,26 +51,25 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesGymEventTransformer(): GymEventTransformer {
-        return GymEventTransformer()
+    fun providesGymSchedulePresenter(scheduleInteractor: GymScheduleInteractor): GymSchedulePresenter {
+        return GymSchedulePresenter(scheduleInteractor)
     }
 
     @Provides
     @Singleton
-    fun providesGymSchedulePresenter(scheduleInteractor: GymScheduleInteractor, eventTypeStateInteractor: EventTypeStateInteractor): GymSchedulePresenter {
-        return GymSchedulePresenter(scheduleInteractor, eventTypeStateInteractor)
+    fun providesGymScheduleInteractor(gymScheduleRepository: GymScheduleRepository, eventTypeStateRepository: EventTypeStateRepository): GymScheduleInteractor {
+        return GymScheduleInteractor(gymScheduleRepository, eventTypeStateRepository)
     }
 
     @Provides
     @Singleton
-    fun providesGymScheduleInteractor(requestQueue: RequestQueue, transformer: GymEventTransformer): GymScheduleInteractor {
-        return GymScheduleInteractor(requestQueue, transformer)
+    fun providesEventTypeStateInteractor(appDatabase: AppDatabase): EventTypeStateRepository {
+        return EventTypeStateRepository(appDatabase)
     }
 
     @Provides
     @Singleton
-    fun providesEventTypeStateInteractor(appDatabase: AppDatabase): EventTypeStateInteractor {
-        return EventTypeStateInteractor(appDatabase)
+    fun providesGymScheduleRepository(retrofit: Retrofit): GymScheduleRepository {
+        return GymScheduleRepository(retrofit)
     }
-
 }

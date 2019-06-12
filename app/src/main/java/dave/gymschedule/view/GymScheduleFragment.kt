@@ -11,21 +11,20 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerFragment
 import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.R
-import dave.gymschedule.model.GymEvent
+import dave.gymschedule.model.GymEventViewModel
 import dave.gymschedule.presenter.GymSchedulePresenter
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers.io
 import kotlinx.android.synthetic.main.fragment_schedule_list.*
-import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
-import java.util.Locale
 import javax.inject.Inject
 
 class GymScheduleFragment : DaggerFragment() {
 
     companion object {
         private const val TAG = "GymScheduleFragment"
-        private val DISPLAYED_DATE_FORMAT = SimpleDateFormat("EEEE MMM dd, YYYY", Locale.getDefault())
         const val DATE_KEY = "date"
     }
 
@@ -59,8 +58,9 @@ class GymScheduleFragment : DaggerFragment() {
         error_text?.visibility = View.INVISIBLE
         loading_text?.visibility = View.VISIBLE
         updateSchedule(ArrayList())
-        date_text?.text = DISPLAYED_DATE_FORMAT.format(date.time)
         disposables.add(presenter.getGymEventsForDate(date)
+                .subscribeOn(io())
+                .observeOn(mainThread())
                 .subscribe({ visibleEvents ->
                     Log.d(TAG, "got events for date ${date.time}, revealing page")
                     updateSchedule(visibleEvents)
@@ -73,8 +73,8 @@ class GymScheduleFragment : DaggerFragment() {
         )
     }
 
-    private fun updateSchedule(gymEvents: List<GymEvent>) {
-        gym_events_recycler_view?.adapter = GymEventAdapter(gymEvents)
+    private fun updateSchedule(gymEvents: List<GymEventViewModel>) {
+        gym_events_recycler_view?.adapter = GymEventAdapter(requireContext(), gymEvents)
     }
 
     private fun showErrorMessage(errorMessage: String, error: Throwable) {

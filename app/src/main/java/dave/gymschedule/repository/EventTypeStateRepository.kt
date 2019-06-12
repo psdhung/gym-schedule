@@ -1,4 +1,4 @@
-package dave.gymschedule.interactor
+package dave.gymschedule.repository
 
 import android.util.Log
 import dave.gymschedule.database.AppDatabase
@@ -7,17 +7,21 @@ import dave.gymschedule.model.EventType
 import io.reactivex.Completable
 import io.reactivex.subjects.BehaviorSubject
 
-class EventTypeStateInteractor(private val database: AppDatabase) {
+class EventTypeStateRepository(private val database: AppDatabase) {
 
     companion object {
-        private val TAG = EventTypeStateInteractor::class.java.simpleName
+        private val TAG = EventTypeStateRepository::class.java.simpleName
     }
 
     private val eventTypeStates: MutableMap<Int, Boolean> = HashMap()
-    private val eventTypeStatesPublisher: BehaviorSubject<MutableMap<Int, Boolean>> = BehaviorSubject.create()
+    private val eventTypeStatesPublisher: BehaviorSubject<Map<Int, Boolean>> = BehaviorSubject.create()
 
     fun initialize(): Completable {
-        return database.eventTypeStateDao().getAllEventTypeStates()
+        // TODO
+        eventTypeStates[EventType.POOL_ACTIVITIES.eventTypeId] = true
+
+        return database.eventTypeStateDao()
+                .getAllEventTypeStates()
                 .map { eventStates ->
                     Log.d(TAG, "got list, size=${eventStates.size}")
                     eventStates.forEach {
@@ -31,14 +35,15 @@ class EventTypeStateInteractor(private val database: AppDatabase) {
                 .toCompletable()
     }
 
-    fun getEventTypeMapPublishSubject(): BehaviorSubject<MutableMap<Int, Boolean>> {
+    fun getEventTypeMapPublishSubject(): BehaviorSubject<Map<Int, Boolean>> {
         return eventTypeStatesPublisher
     }
 
     fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable {
         Log.d(TAG, "updating list, id=${eventType.eventTypeId}, checked=$checked")
 
-        return database.eventTypeStateDao().updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
+        return database.eventTypeStateDao()
+                .updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
                 .doOnComplete {
                     Log.d(TAG, "finished updating database")
                     eventTypeStates[eventType.eventTypeId] = checked
@@ -47,7 +52,7 @@ class EventTypeStateInteractor(private val database: AppDatabase) {
                 }
     }
 
-    fun anyEventTypesChecked(): Boolean {
+    fun areAnyEventTypesChecked(): Boolean {
         return eventTypeStates.values.any { it }
     }
 

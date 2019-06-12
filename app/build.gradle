@@ -3,11 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-def androidVersion = '27.1.0'
-def daggerVersion = '2.21'
-def mockitoVersion = '2.7.6'
-def roomVersion = '2.1.0-beta01'
-
 android {
     compileSdkVersion 28
     compileOptions {
@@ -40,53 +35,67 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0-alpha01'
-
-    // Kotlin
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlin_version
-
     // Android Layout
+    def androidVersion = '27.1.0'
     implementation 'com.android.support:appcompat-v7:' + androidVersion
     implementation 'com.android.support:recyclerview-v7:' + androidVersion
     implementation 'com.android.support:cardview-v7:' + androidVersion
     implementation 'com.android.support:design:' + androidVersion
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+
+    // Kotlin
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
 
     // Dagger
+    def daggerVersion = '2.21'
     implementation 'com.google.dagger:dagger:' + daggerVersion
     implementation 'com.google.dagger:dagger-android:' + daggerVersion
     implementation 'com.google.dagger:dagger-android-support:' + daggerVersion
-    implementation 'androidx.appcompat:appcompat:1.0.2'
     kapt 'com.google.dagger:dagger-compiler:' + daggerVersion
+    kapt 'com.google.dagger:dagger-android-processor:' + daggerVersion
     annotationProcessor 'com.google.dagger:dagger-android-processor:' + daggerVersion
     annotationProcessor 'com.google.dagger:dagger-compiler:' + daggerVersion
-    kapt 'com.google.dagger:dagger-android-processor:' + daggerVersion
 
     // Room
+    def roomVersion = '2.1.0-rc01'
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
-
     testImplementation "androidx.room:room-testing:$roomVersion"
+
+    // Retrofit
+    def retrofitVersion = '2.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:' + retrofitVersion
+    implementation 'com.squareup.retrofit2:converter-gson:' + retrofitVersion
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:' + retrofitVersion
+
+    // OkHttp
+    def okHttpVersion = '4.0.0-RC1'
+    implementation 'com.squareup.okhttp3:okhttp:' + okHttpVersion
+    implementation 'com.squareup.okhttp3:logging-interceptor:' + okHttpVersion
+
+    /* Testing */
+    def mockitoVersion = '2.7.6'
+    def dexVersion = '1.4'
 
     // Unit Testing
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:' + mockitoVersion
-
     testImplementation 'androidx.arch.core:core-testing:2.0.1'
 
     // Instrumented Testing
-    androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'org.mockito:mockito-core:' + mockitoVersion
 
-    androidTestImplementation 'com.crittercism.dexmaker:dexmaker:1.4'
-    androidTestImplementation 'com.crittercism.dexmaker:dexmaker-dx:1.4'
-    androidTestImplementation 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
+    androidTestImplementation 'com.crittercism.dexmaker:dexmaker:' + dexVersion
+    androidTestImplementation 'com.crittercism.dexmaker:dexmaker-dx:' + dexVersion
+    androidTestImplementation 'com.crittercism.dexmaker:dexmaker-mockito:' + dexVersion
 }
