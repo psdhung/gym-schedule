@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8ed0ff4a4b963cf32816a149ba3e362c",
+    "identityHash": "00eca0c49aa7665e5c487e1126d13eaf",
     "entities": [
       {
         "tableName": "EventTypeState",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eventTypeId` INTEGER NOT NULL, `checked` INTEGER NOT NULL, PRIMARY KEY(`eventTypeId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eventTypeId` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, PRIMARY KEY(`eventTypeId`))",
         "fields": [
           {
             "fieldPath": "eventTypeId",
@@ -15,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "checked",
-            "columnName": "checked",
+            "fieldPath": "enabled",
+            "columnName": "enabled",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -31,9 +31,10 @@
         "foreignKeys": []
       }
     ],
+    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"8ed0ff4a4b963cf32816a149ba3e362c\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '00eca0c49aa7665e5c487e1126d13eaf')"
     ]
   }
 }

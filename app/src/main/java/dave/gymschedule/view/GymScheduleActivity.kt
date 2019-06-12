@@ -10,7 +10,7 @@ import java.util.Calendar
 class GymScheduleActivity : DaggerAppCompatActivity() {
 
     companion object {
-        private val TAG = SplashScreenActivity::class.java.simpleName
+        private val TAG = GymScheduleActivity::class.java.simpleName
 
         private const val MAX_DAYS = 7
     }

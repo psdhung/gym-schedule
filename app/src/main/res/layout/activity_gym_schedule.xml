@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="dave.gymschedule.view.SplashScreenActivity">
+    tools:context="dave.gymschedule.view.GymScheduleActivity">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/schedule_tab_layout"

@@ -16,17 +16,19 @@ class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleReposi
 
     fun getGymEventViewModelsObservable(date: Calendar): Observable<List<GymEventViewModel>> {
         val gymEventViewModelObservable = gymScheduleRepository.getGymEventsViewModelSingle(date).toObservable()
-        return if (eventTypeStateRepository.areAnyEventTypesChecked()) {
-            Observable.combineLatest(
-                    gymEventViewModelObservable,
-                    eventTypeStateRepository.getEventTypeMapPublishSubject(),
-                    BiFunction { gymEventViewModels: List<GymEventViewModel>, eventTypeMap: Map<Int, Boolean> ->
+
+        return Observable.combineLatest(
+                gymEventViewModelObservable,
+                eventTypeStateRepository.eventTypeStatesPublisher,
+                BiFunction { gymEventViewModels: List<GymEventViewModel>, eventTypeMap: Map<Int, Boolean> ->
+                    if (eventTypeMap.isEmpty() || eventTypeMap.all { !it.value }) {
+                        gymEventViewModels
+                    } else {
                         gymEventViewModels.filter {
                             eventTypeMap[it.eventType.eventTypeId] ?: false
                         }
-                    })
-        } else {
-            gymEventViewModelObservable
-        }
+                    }
+                })
     }
+
 }

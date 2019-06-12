@@ -25,7 +25,7 @@ class GymScheduleFragment : DaggerFragment() {
 
     companion object {
         private const val TAG = "GymScheduleFragment"
-        const val DATE_KEY = "date"
+        const val SCHEDULE_DATE_KEY = "schedule_date"
     }
 
     @Inject
@@ -39,7 +39,7 @@ class GymScheduleFragment : DaggerFragment() {
         date = Calendar.getInstance()
         val bundle = arguments
         bundle?.let {
-            date.timeInMillis = bundle.getLong(DATE_KEY)
+            date.timeInMillis = bundle.getLong(SCHEDULE_DATE_KEY)
         }
         return inflater.inflate(R.layout.fragment_schedule_list, container, false)
     }

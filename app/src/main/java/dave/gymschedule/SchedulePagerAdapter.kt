@@ -19,7 +19,7 @@ class SchedulePagerAdapter(fragmentManager: FragmentManager,
     override fun getItem(position: Int): Fragment {
         val fragment = GymScheduleFragment()
         val args = Bundle()
-        args.putLong(GymScheduleFragment.DATE_KEY, getDateForFragment(position))
+        args.putLong(GymScheduleFragment.SCHEDULE_DATE_KEY, getDateForFragment(position))
         fragment.arguments = args
         return fragment
     }

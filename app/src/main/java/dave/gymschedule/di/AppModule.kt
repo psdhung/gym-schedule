@@ -46,7 +46,11 @@ class AppModule {
     @Provides
     @Singleton
     fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, "event-type-state-database").build()
+        return Room.databaseBuilder(
+                context,
+                AppDatabase::class.java,
+                "event-type-state-database"
+        ).build()
     }
 
     @Provides
@@ -57,7 +61,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesGymScheduleInteractor(gymScheduleRepository: GymScheduleRepository, eventTypeStateRepository: EventTypeStateRepository): GymScheduleInteractor {
+    fun providesGymScheduleInteractor(
+            gymScheduleRepository: GymScheduleRepository,
+            eventTypeStateRepository: EventTypeStateRepository): GymScheduleInteractor {
         return GymScheduleInteractor(gymScheduleRepository, eventTypeStateRepository)
     }
 

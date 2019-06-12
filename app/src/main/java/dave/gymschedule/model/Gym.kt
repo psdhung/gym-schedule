@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 
 data class Gym(
-    val centreId: Int,
-    @SerializedName("classes")
-    val events: List<GymEvents>
+        val centreId: Int,
+
+        @SerializedName("classes")
+        val events: List<GymEvents>
 )

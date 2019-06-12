@@ -5,6 +5,8 @@ import dave.gymschedule.database.AppDatabase
 import dave.gymschedule.database.EventTypeState
 import dave.gymschedule.model.EventType
 import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 
 class EventTypeStateRepository(private val database: AppDatabase) {
@@ -13,47 +15,34 @@ class EventTypeStateRepository(private val database: AppDatabase) {
         private val TAG = EventTypeStateRepository::class.java.simpleName
     }
 
-    private val eventTypeStates: MutableMap<Int, Boolean> = HashMap()
-    private val eventTypeStatesPublisher: BehaviorSubject<Map<Int, Boolean>> = BehaviorSubject.create()
+    val eventTypeStatesPublisher: BehaviorSubject<Map<Int, Boolean>> = BehaviorSubject.create()
 
-    fun initialize(): Completable {
-        // TODO
-        eventTypeStates[EventType.POOL_ACTIVITIES.eventTypeId] = true
-
-        return database.eventTypeStateDao()
+    init {
+        val eventTypeStatesLiveData = database.eventTypeStateDao()
                 .getAllEventTypeStates()
-                .map { eventStates ->
-                    Log.d(TAG, "got list, size=${eventStates.size}")
-                    eventStates.forEach {
-                        Log.d(TAG, "type=${it.eventTypeId}, checked=${it.checked}")
-                        eventTypeStates[it.eventTypeId] = it.checked
-                    }
 
-                    Log.d(TAG, "constructor, publishing event states")
-                    eventTypeStatesPublisher.onNext(eventTypeStates)
-                }
-                .toCompletable()
-    }
+        eventTypeStatesLiveData.observeForever { eventTypeStates ->
+            Log.d(TAG, "event types updated: $eventTypeStates")
+            val eventTypeMap = mutableMapOf<Int, Boolean>()
+            eventTypeStates.forEach { eventTypeState ->
+                Log.d(TAG, "init, ${eventTypeState.eventTypeId} = ${eventTypeState.enabled}")
+                eventTypeMap[eventTypeState.eventTypeId] = eventTypeState.enabled
+            }
+            eventTypeStatesPublisher.onNext(eventTypeMap)
+        }
 
-    fun getEventTypeMapPublishSubject(): BehaviorSubject<Map<Int, Boolean>> {
-        return eventTypeStatesPublisher
+        // TODO
+/*        updateEventTypeState(EventType.POOL_ACTIVITIES, true)
+                .subscribeOn(io())
+                .observeOn(io())
+                .subscribe()*/
     }
 
     fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable {
-        Log.d(TAG, "updating list, id=${eventType.eventTypeId}, checked=$checked")
-
         return database.eventTypeStateDao()
                 .updateEventTypeState(EventTypeState(eventType.eventTypeId, checked))
-                .doOnComplete {
-                    Log.d(TAG, "finished updating database")
-                    eventTypeStates[eventType.eventTypeId] = checked
-                    Log.d(TAG, "updateEventTypeState(), publishing event states")
-                    eventTypeStatesPublisher.onNext(eventTypeStates)
-                }
-    }
-
-    fun areAnyEventTypesChecked(): Boolean {
-        return eventTypeStates.values.any { it }
+                .subscribeOn(io())
+                .observeOn(mainThread())
     }
 
 }
