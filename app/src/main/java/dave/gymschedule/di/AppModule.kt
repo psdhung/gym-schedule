@@ -10,6 +10,7 @@ import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.presenter.GymSchedulePresenter
 import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -27,12 +28,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesRetrofit(): Retrofit {
+    fun providesRetrofit(@ApplicationContext context: Context): Retrofit {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val client = OkHttpClient.Builder()
                 .addInterceptor(interceptor)
+                .cache(Cache(context.cacheDir, 10 * 1024 * 1024))
                 .build()
 
         return Retrofit.Builder()

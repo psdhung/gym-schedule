@@ -7,15 +7,23 @@
     android:orientation="vertical"
     tools:context="dave.gymschedule.view.GymScheduleActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/schedule_tab_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:tabMode="scrollable" />
+        app:tabMode="scrollable"
+        tools:background="@android:color/holo_blue_light" />
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/schedule_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:background="@android:color/holo_red_light" />
 
 </LinearLayout>

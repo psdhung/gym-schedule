@@ -25,7 +25,7 @@ class EventTypeStateRepository(private val database: AppDatabase) {
             Log.d(TAG, "event types updated: $eventTypeStates")
             val eventTypeMap = mutableMapOf<Int, Boolean>()
             eventTypeStates.forEach { eventTypeState ->
-                Log.d(TAG, "init, ${eventTypeState.eventTypeId} = ${eventTypeState.enabled}")
+                Log.d(TAG, "${eventTypeState.eventTypeId} = ${eventTypeState.enabled}")
                 eventTypeMap[eventTypeState.eventTypeId] = eventTypeState.enabled
             }
             eventTypeStatesPublisher.onNext(eventTypeMap)
