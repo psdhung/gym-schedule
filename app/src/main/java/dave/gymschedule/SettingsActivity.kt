@@ -54,6 +54,9 @@ class SettingsActivity : DaggerAppCompatActivity() {
                     Log.d(TAG, "got event type states: $eventTypesMap")
                     val eventTypes = mutableListOf<Pair<EventType, Boolean>>()
                     for (entry in EventType.values()) {
+                        if (entry == EventType.OTHER) {
+                            continue
+                        }
                         val enabled = eventTypesMap[entry.eventTypeId] ?: false
                         eventTypes.add(Pair(EventType.getEventTypeFromId(entry.eventTypeId), enabled))
                     }
