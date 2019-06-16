@@ -33,7 +33,12 @@ class GymScheduleRepository(private val retrofit: Retrofit) {
                             gymEvent.details,
                             gymEvent.startTime,
                             gymEvent.endTime,
-                            gymEvent.location
+                            gymEvent.location,
+                            gymEvent.description,
+                            gymEvent.fee,
+                            gymEvent.childMinding,
+                            gymEvent.ageRange,
+                            gymEvent.registrationType
                     ))
                 }
             }

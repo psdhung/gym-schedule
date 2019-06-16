@@ -3,6 +3,6 @@
     <color name="colorPrimary">#2E2E2E</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF0000</color>
-    <color name="event_card_bg_color">#FFDDDDDD</color>
+    <color name="event_card_bg_color">#EBEBEB</color>
     <color name="event_subheading_text_color">#686868</color>
 </resources>

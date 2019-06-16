@@ -4,4 +4,9 @@
     <string name="action_settings_title">settings</string>
     <string name="settings_activity_title">Settings</string>
     <string name="settings_event_header">Events</string>
+    <string name="child_minding_available">child minding available</string>
+    <string name="event_description_header">Description:</string>
+    <string name="event_fee_header">Fee:</string>
+    <string name="event_age_range_header">Age range:</string>
+    <string name="event_registration_header">Registation:</string>
 </resources>
