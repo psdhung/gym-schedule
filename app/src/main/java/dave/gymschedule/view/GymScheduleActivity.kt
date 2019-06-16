@@ -7,7 +7,6 @@ import android.view.MenuItem
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
 import dave.gymschedule.SchedulePagerAdapter
-import dave.gymschedule.SettingsActivity
 import kotlinx.android.synthetic.main.activity_gym_schedule.*
 import java.util.Calendar
 

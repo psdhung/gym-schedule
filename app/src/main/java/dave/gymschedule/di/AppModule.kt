@@ -8,6 +8,7 @@ import dagger.Provides
 import dave.gymschedule.database.AppDatabase
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.presenter.GymSchedulePresenter
+import dave.gymschedule.presenter.SettingsPresenter
 import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
 import okhttp3.Cache
@@ -79,5 +80,11 @@ class AppModule {
     @Singleton
     fun providesGymScheduleRepository(retrofit: Retrofit): GymScheduleRepository {
         return GymScheduleRepository(retrofit)
+    }
+
+    @Provides
+    @Singleton
+    fun providesSettingsPresenter(eventTypeStateRepository: EventTypeStateRepository): SettingsPresenter {
+        return SettingsPresenter(eventTypeStateRepository)
     }
 }

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerFragment
-import dave.gymschedule.GymEventAdapter
 import dave.gymschedule.R
 import dave.gymschedule.model.GymEventViewModel
 import dave.gymschedule.presenter.GymSchedulePresenter
@@ -51,7 +50,7 @@ class GymScheduleFragment : DaggerFragment() {
         gym_events_recycler_view?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         gym_events_recycler_view?.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                outRect.set(10, 10, 10, 10)
+                outRect.set(20, 10, 20, 10)
             }
         })
 

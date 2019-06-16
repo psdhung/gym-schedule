@@ -30,12 +30,6 @@ class EventTypeStateRepository(private val database: AppDatabase) {
             }
             eventTypeStatesPublisher.onNext(eventTypeMap)
         }
-
-        // TODO
-/*        updateEventTypeState(EventType.POOL_ACTIVITIES, true)
-                .subscribeOn(io())
-                .observeOn(io())
-                .subscribe()*/
     }
 
     fun updateEventTypeState(eventType: EventType, checked: Boolean): Completable {
