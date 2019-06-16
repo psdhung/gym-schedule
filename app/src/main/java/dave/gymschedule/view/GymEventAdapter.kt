@@ -1,22 +1,21 @@
 package dave.gymschedule.view
 
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import dave.gymschedule.R
 import dave.gymschedule.model.GymEventViewModel
 
 class GymEventAdapter(private val gymEvents: List<GymEventViewModel>) : RecyclerView.Adapter<GymEventAdapter.GymEventViewHolder>() {
 
-    class GymEventViewHolder(val view: CardView) : RecyclerView.ViewHolder(view)
+    class GymEventViewHolder(val view: MaterialCardView) : RecyclerView.ViewHolder(view)
 
     companion object {
         private val TAG = GymEventAdapter::class.java.simpleName
@@ -25,7 +24,7 @@ class GymEventAdapter(private val gymEvents: List<GymEventViewModel>) : Recycler
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GymEventViewHolder {
-        val layout = LayoutInflater.from(parent.context).inflate(R.layout.gym_event_entry, parent, false) as CardView
+        val layout = LayoutInflater.from(parent.context).inflate(R.layout.gym_event_entry, parent, false) as MaterialCardView
         return GymEventViewHolder(layout)
     }
 
@@ -38,9 +37,11 @@ class GymEventAdapter(private val gymEvents: List<GymEventViewModel>) : Recycler
         holder.view.findViewById<TextView>(R.id.event_end_time).text = gymEvent.endTime
 
         if (LANE_SWIM_NAME.equals(gymEvent.name, ignoreCase = true)) {
-            holder.view.setBackgroundResource(R.drawable.bg_highlighted_event)
+            holder.view.strokeColor = ContextCompat.getColor(holder.view.context ,R.color.event_highlight_color)
+            holder.view.strokeWidth = 8
         } else {
-            holder.view.background = ColorDrawable(ContextCompat.getColor(holder.view.context, R.color.event_card_bg_color))
+            holder.view.strokeColor = 0
+            holder.view.strokeWidth = 0
         }
 
         val detailsTextView = holder.view.findViewById<TextView>(R.id.event_details)

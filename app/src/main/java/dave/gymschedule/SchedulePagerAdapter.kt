@@ -16,6 +16,7 @@ class SchedulePagerAdapter(fragmentManager: FragmentManager,
     companion object {
         private val DISPLAYED_DATE_FORMAT = SimpleDateFormat("EE MMM dd, YYYY", Locale.getDefault())
     }
+
     override fun getItem(position: Int): Fragment {
         val fragment = GymScheduleFragment()
         val args = Bundle()
