@@ -13,8 +13,6 @@ import java.util.Calendar
 class GymScheduleActivity : DaggerAppCompatActivity() {
 
     companion object {
-        private val TAG = GymScheduleActivity::class.java.simpleName
-
         private const val MAX_DAYS = 7
     }
 
@@ -43,4 +41,5 @@ class GymScheduleActivity : DaggerAppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

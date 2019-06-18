@@ -7,7 +7,16 @@ import dave.gymschedule.model.EventType
 
 class EventTypeCheckboxAdapter(private val onCheckChangedListener: (eventType: EventType, isChecked: Boolean) -> Unit) : RecyclerView.Adapter<EventTypeCheckboxAdapter.EventTypeCheckboxViewHolder>() {
 
-    class EventTypeCheckboxViewHolder(val item: CheckBox) : RecyclerView.ViewHolder(item)
+    class EventTypeCheckboxViewHolder(val view: CheckBox) : RecyclerView.ViewHolder(view) {
+        fun setEventName(eventName: String) {
+            view.text = eventName
+        }
+
+        fun setIsChecked(isChecked: Boolean) {
+            view.isChecked = isChecked
+        }
+
+    }
 
     private var eventTypes: List<Pair<EventType, Boolean>> = listOf()
 
@@ -23,9 +32,9 @@ class EventTypeCheckboxAdapter(private val onCheckChangedListener: (eventType: E
 
     override fun onBindViewHolder(holder: EventTypeCheckboxViewHolder, position: Int) {
         val eventTypePair = eventTypes[position]
-        holder.item.text = eventTypePair.first.eventName
-        holder.item.isChecked = eventTypePair.second
-        holder.item.setOnCheckedChangeListener { _, isChecked ->
+        holder.setEventName(eventTypePair.first.eventName)
+        holder.setIsChecked(eventTypePair.second)
+        holder.view.setOnCheckedChangeListener { _, isChecked ->
             onCheckChangedListener(eventTypePair.first, isChecked)
         }
     }

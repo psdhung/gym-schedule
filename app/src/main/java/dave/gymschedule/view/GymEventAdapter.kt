@@ -1,27 +1,23 @@
 package dave.gymschedule.view
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import dave.gymschedule.R
 import dave.gymschedule.model.GymEventViewModel
 
-class GymEventAdapter(private val gymEvents: List<GymEventViewModel>) : RecyclerView.Adapter<GymEventAdapter.GymEventViewHolder>() {
-
-    class GymEventViewHolder(val view: MaterialCardView) : RecyclerView.ViewHolder(view)
+class GymEventAdapter : RecyclerView.Adapter<GymEventViewHolder>() {
 
     companion object {
-        private val TAG = GymEventAdapter::class.java.simpleName
-
         private const val LANE_SWIM_NAME = "Lane Swim"
     }
+
+    var gymEvents: List<GymEventViewModel> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GymEventViewHolder {
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.gym_event_entry, parent, false) as MaterialCardView
@@ -31,62 +27,36 @@ class GymEventAdapter(private val gymEvents: List<GymEventViewModel>) : Recycler
     override fun onBindViewHolder(holder: GymEventViewHolder, position: Int) {
         val gymEvent = gymEvents[position]
 
-        holder.view.findViewById<TextView>(R.id.event_name).text = gymEvent.name
-        holder.view.findViewById<TextView>(R.id.event_location).text = gymEvent.location
-        holder.view.findViewById<TextView>(R.id.event_start_time).text = gymEvent.startTime
-        holder.view.findViewById<TextView>(R.id.event_end_time).text = gymEvent.endTime
+        holder.setEventName(gymEvent.name)
+        holder.setEventLocation(gymEvent.location)
+        holder.setEventStartTime(gymEvent.startTime)
+        holder.setEventEndTime(gymEvent.endTime)
+
+        holder.setEventDetails(gymEvent.details)
+        holder.setEventDescription(gymEvent.description)
+        holder.setEventFee(gymEvent.fee)
+        holder.setAgeRange(gymEvent.ageRange)
+        holder.setEventRegistration(gymEvent.registration)
+        holder.setHasChildMinding(gymEvent.childMinding)
 
         if (LANE_SWIM_NAME.equals(gymEvent.name, ignoreCase = true)) {
-            holder.view.strokeColor = ContextCompat.getColor(holder.view.context ,R.color.event_highlight_color)
-            holder.view.strokeWidth = 8
+            holder.showHighlight()
         } else {
-            holder.view.strokeColor = 0
-            holder.view.strokeWidth = 0
+            holder.hideHighlight()
         }
 
-        val detailsTextView = holder.view.findViewById<TextView>(R.id.event_details)
-        val details = gymEvent.details
-        if (details?.isNotEmpty() == true) {
-            detailsTextView.text = details
-            detailsTextView.visibility = View.VISIBLE
+        if (gymEvent.isExpanded) {
+            holder.showExpandedSection()
         } else {
-            detailsTextView.visibility = View.GONE
+            holder.hideExpandedSection()
         }
-
-        val expandedSection = holder.view.findViewById<LinearLayout>(R.id.event_expanded_section)
-        Log.d(TAG, "event at position $position is expanded? ${gymEvent.isExpanded}")
-        expandedSection.visibility = if (gymEvent.isExpanded) View.VISIBLE else View.GONE
 
         holder.view.setOnClickListener {
             // TODO animation
-            val isCurrentlyExpanded = expandedSection.isVisible
-            expandedSection.visibility = if (isCurrentlyExpanded) View.GONE else View.VISIBLE
+            val isCurrentlyExpanded = holder.isCurrentlyExpanded()
+            if (isCurrentlyExpanded) holder.hideExpandedSection() else holder.showExpandedSection()
             gymEvent.isExpanded = !isCurrentlyExpanded
-            Log.d(TAG, "toggled event at position $position to ${if (gymEvent.isExpanded) "" else "not "}expanded")
         }
-
-        val eventDescription = gymEvent.description
-        val eventDescriptionWrapper = holder.view.findViewById<ViewGroup>(R.id.event_description_wrapper)
-        if (eventDescription.isEmpty() || eventDescription.isBlank()) {
-            eventDescriptionWrapper.visibility = View.GONE
-        } else {
-            eventDescriptionWrapper.visibility = View.VISIBLE
-            holder.view.findViewById<TextView>(R.id.event_description).text = eventDescription
-        }
-
-        val eventFee = gymEvent.fee
-        val eventFeeWrapper = holder.view.findViewById<ViewGroup>(R.id.event_fee_wrapper)
-        if (eventFee.isEmpty() || eventFee.isBlank()) {
-            eventFeeWrapper.visibility = View.GONE
-        } else {
-            eventFeeWrapper.visibility = View.VISIBLE
-            holder.view.findViewById<TextView>(R.id.event_fee).text = eventFee
-        }
-
-        holder.view.findViewById<TextView>(R.id.event_age_range).text = gymEvent.ageRange
-        holder.view.findViewById<TextView>(R.id.event_registration).text = gymEvent.registration
-
-        holder.view.findViewById<TextView>(R.id.event_has_child_minding).visibility = if (gymEvent.childMinding) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount(): Int {

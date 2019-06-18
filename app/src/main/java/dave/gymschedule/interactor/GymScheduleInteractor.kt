@@ -10,10 +10,6 @@ import java.util.Calendar
 class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleRepository,
                             private val eventTypeStateRepository: EventTypeStateRepository) {
 
-    companion object {
-        private val TAG = GymScheduleInteractor::class.java.simpleName
-    }
-
     fun getGymEventViewModelsObservable(date: Calendar): Observable<List<GymEventViewModel>> {
         val gymEventViewModelObservable = gymScheduleRepository.getGymEventsViewModelSingle(date).toObservable()
 
@@ -28,7 +24,8 @@ class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleReposi
                             eventTypeMap[it.eventType.eventTypeId] ?: false
                         }
                     }
-                })
+                }
+        )
     }
 
 }

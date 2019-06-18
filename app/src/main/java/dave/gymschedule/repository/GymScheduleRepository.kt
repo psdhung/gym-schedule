@@ -5,19 +5,16 @@ import dave.gymschedule.model.EventType
 import dave.gymschedule.model.GymEventViewModel
 import dave.gymschedule.service.YmcaService
 import io.reactivex.Single
-import retrofit2.Retrofit
 import java.util.Calendar
 import java.util.Locale
 
-class GymScheduleRepository(private val retrofit: Retrofit) {
+class GymScheduleRepository(private val ymcaService: YmcaService) {
 
     companion object {
         private val TAG = GymScheduleRepository::class.java.simpleName
     }
 
     fun getGymEventsViewModelSingle(date: Calendar): Single<List<GymEventViewModel>> {
-        val ymcaService = retrofit.create(YmcaService::class.java)
-
         val startDateTime = "${getFormattedDateString(date)}+12:00:00+AM"
         val endDateTime = "${getFormattedDateString(date)}+11:59:59+PM"
         Log.d(TAG, "getting gym events for date $date")
@@ -53,4 +50,5 @@ class GymScheduleRepository(private val retrofit: Retrofit) {
                 calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH))
     }
+
 }

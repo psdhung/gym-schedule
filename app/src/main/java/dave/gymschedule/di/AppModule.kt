@@ -11,6 +11,7 @@ import dave.gymschedule.presenter.GymSchedulePresenter
 import dave.gymschedule.presenter.SettingsPresenter
 import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
+import dave.gymschedule.service.YmcaService
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -48,6 +49,12 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun providesYmcaService(retrofit: Retrofit): YmcaService {
+        return retrofit.create(YmcaService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
                 context,
@@ -78,8 +85,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesGymScheduleRepository(retrofit: Retrofit): GymScheduleRepository {
-        return GymScheduleRepository(retrofit)
+    fun providesGymScheduleRepository(ymcaService: YmcaService): GymScheduleRepository {
+        return GymScheduleRepository(ymcaService)
     }
 
     @Provides

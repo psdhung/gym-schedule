@@ -10,13 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerFragment
 import dave.gymschedule.R
-import dave.gymschedule.model.GymEventViewModel
 import dave.gymschedule.presenter.GymSchedulePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers.io
 import kotlinx.android.synthetic.main.fragment_schedule_list.*
-import java.util.ArrayList
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -36,9 +34,8 @@ class GymScheduleFragment : DaggerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         date = Calendar.getInstance()
-        val bundle = arguments
-        bundle?.let {
-            date.timeInMillis = bundle.getLong(SCHEDULE_DATE_KEY)
+        arguments?.let {
+            date.timeInMillis = it.getLong(SCHEDULE_DATE_KEY)
         }
         return inflater.inflate(R.layout.fragment_schedule_list, container, false)
     }
@@ -47,6 +44,8 @@ class GymScheduleFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "onViewCreated for date ${date.time}")
+        val adapter = GymEventAdapter()
+        gym_events_recycler_view?.adapter = adapter
         gym_events_recycler_view?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         gym_events_recycler_view?.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
@@ -56,13 +55,13 @@ class GymScheduleFragment : DaggerFragment() {
 
         error_text?.visibility = View.INVISIBLE
         loading_text?.visibility = View.VISIBLE
-        updateSchedule(ArrayList())
+
         disposables.add(presenter.getGymEventsForDate(date)
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribe({ visibleEvents ->
                     Log.d(TAG, "got events for date ${date.time}, revealing page")
-                    updateSchedule(visibleEvents)
+                    adapter.gymEvents = visibleEvents
                     hideLoadingIndicator()
                 }, { error ->
                     Log.d(TAG, "failed to retrieve schedule", error)
@@ -72,8 +71,8 @@ class GymScheduleFragment : DaggerFragment() {
         )
     }
 
-    private fun updateSchedule(gymEvents: List<GymEventViewModel>) {
-        gym_events_recycler_view?.adapter = GymEventAdapter(gymEvents)
+    private fun hideLoadingIndicator() {
+        loading_text?.visibility = View.INVISIBLE
     }
 
     private fun showErrorMessage(errorMessage: String, error: Throwable) {
@@ -81,12 +80,9 @@ class GymScheduleFragment : DaggerFragment() {
         error_text?.visibility = View.VISIBLE
     }
 
-    private fun hideLoadingIndicator() {
-        loading_text?.visibility = View.INVISIBLE
-    }
-
     override fun onDestroy() {
         disposables.dispose()
         super.onDestroy()
     }
+
 }

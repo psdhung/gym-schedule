@@ -6,6 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 class SettingsPresenter(private val eventTypeStateRepository: EventTypeStateRepository) {
+
     fun onEventTypeToggled(eventType: EventType, isEnabled: Boolean): Completable {
         return eventTypeStateRepository.updateEventTypeState(eventType, isEnabled)
     }
@@ -13,4 +14,5 @@ class SettingsPresenter(private val eventTypeStateRepository: EventTypeStateRepo
     fun getEventTypesMapObservable(): Observable<Map<Int, Boolean>> {
         return eventTypeStateRepository.eventTypeStatesPublisher
     }
+
 }
