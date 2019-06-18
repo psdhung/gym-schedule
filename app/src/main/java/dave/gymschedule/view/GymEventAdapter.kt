@@ -9,10 +9,6 @@ import dave.gymschedule.model.GymEventViewModel
 
 class GymEventAdapter : RecyclerView.Adapter<GymEventViewHolder>() {
 
-    companion object {
-        private const val LANE_SWIM_NAME = "Lane Swim"
-    }
-
     var gymEvents: List<GymEventViewModel> = emptyList()
         set(value) {
             field = value
@@ -38,12 +34,6 @@ class GymEventAdapter : RecyclerView.Adapter<GymEventViewHolder>() {
         holder.setAgeRange(gymEvent.ageRange)
         holder.setEventRegistration(gymEvent.registration)
         holder.setHasChildMinding(gymEvent.childMinding)
-
-        if (LANE_SWIM_NAME.equals(gymEvent.name, ignoreCase = true)) {
-            holder.showHighlight()
-        } else {
-            holder.hideHighlight()
-        }
 
         if (gymEvent.isExpanded) {
             holder.showExpandedSection()

@@ -3,7 +3,6 @@ package dave.gymschedule.view
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
@@ -31,11 +30,11 @@ class GymEventViewHolder(val view: MaterialCardView) : RecyclerView.ViewHolder(v
 
     fun setEventDetails(eventDetails: String?) {
         val eventDetailsTextView = view.findViewById<TextView>(R.id.event_details)
-        if (eventDetails?.isNotEmpty() == true) {
+        if (eventDetails?.isEmpty() == true || eventDetails?.isBlank() == true) {
+            eventDetailsTextView.visibility = View.GONE
+        } else {
             eventDetailsTextView.text = eventDetails
             eventDetailsTextView.visibility = View.VISIBLE
-        } else {
-            eventDetailsTextView.visibility = View.GONE
         }
     }
 
@@ -44,8 +43,8 @@ class GymEventViewHolder(val view: MaterialCardView) : RecyclerView.ViewHolder(v
         if (eventDescription.isEmpty() || eventDescription.isBlank()) {
             eventDescriptionWrapper.visibility = View.GONE
         } else {
-            eventDescriptionWrapper.visibility = View.VISIBLE
             view.findViewById<TextView>(R.id.event_description).text = eventDescription
+            eventDescriptionWrapper.visibility = View.VISIBLE
         }
     }
 
@@ -54,8 +53,8 @@ class GymEventViewHolder(val view: MaterialCardView) : RecyclerView.ViewHolder(v
         if (eventFee.isEmpty() || eventFee.isBlank()) {
             eventFeeWrapper.visibility = View.GONE
         } else {
-            eventFeeWrapper.visibility = View.VISIBLE
             view.findViewById<TextView>(R.id.event_fee).text = eventFee
+            eventFeeWrapper.visibility = View.VISIBLE
         }
     }
 
@@ -69,16 +68,6 @@ class GymEventViewHolder(val view: MaterialCardView) : RecyclerView.ViewHolder(v
 
     fun setHasChildMinding(hasChildMinding: Boolean) {
         view.findViewById<TextView>(R.id.event_has_child_minding).visibility = if (hasChildMinding) View.VISIBLE else View.GONE
-    }
-
-    fun showHighlight() {
-        view.strokeColor = ContextCompat.getColor(view.context, R.color.event_highlight_color)
-        view.strokeWidth = 8
-    }
-
-    fun hideHighlight() {
-        view.strokeColor = 0
-        view.strokeWidth = 0
     }
 
     fun showExpandedSection() {
