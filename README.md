@@ -6,7 +6,7 @@ Users can view event details such as start and end time, age range, and registra
 
 // TODO screenshot
 
-Users can also filter the gym schedule to only show events that they're interested in.
+Users can also filter the schedule to only show events that they're interested in.
 
 // TODO screenshot
 
