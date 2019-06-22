@@ -12,7 +12,7 @@ class SettingsPresenter(private val eventTypeStateRepository: EventTypeStateRepo
     }
 
     fun getEventTypesMapObservable(): Observable<Map<Int, Boolean>> {
-        return eventTypeStateRepository.eventTypeStatesPublisher
+        return eventTypeStateRepository.eventTypeStateObservable
     }
 
 }

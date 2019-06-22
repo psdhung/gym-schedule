@@ -4,6 +4,7 @@ import dave.gymschedule.model.EventType
 import dave.gymschedule.model.GymEventViewModel
 import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import org.junit.Assert.assertEquals
@@ -24,7 +25,7 @@ class GymScheduleInteractorTest {
     @Mock
     lateinit var mockEventTypeStateRepository: EventTypeStateRepository
 
-    lateinit var interactor: GymScheduleInteractor
+    private lateinit var interactor: GymScheduleInteractor
 
     @Before
     fun setUp() {
@@ -48,13 +49,14 @@ class GymScheduleInteractorTest {
                         "ageRange",
                         "registration",
                         false
-                        )
+                )
         )
+
         val behaviourSubject = BehaviorSubject.create<Map<Int, Boolean>>()
         behaviourSubject.onNext(mapOf())
 
         `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(Single.just(gymEventViewModels))
-        `when`(mockEventTypeStateRepository.eventTypeStatesPublisher).thenReturn(behaviourSubject)
+        `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(Observable.just(mapOf()))
 
         val list = interactor.getGymEventViewModelsObservable(date).test()
         assertEquals(gymEventViewModels, list.values()[0])
