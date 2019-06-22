@@ -8,7 +8,7 @@ Users can also filter the schedule to only show events that they're interested i
 
 ![settings screen](/images/settings_screen.png) ![filtered schedule](/images/filtered_schedule.png)
 
-Upcoming features:
+## Upcoming features:
 * location picker to select other YMCAs in the GTA
 * sub-event filtering (ex. breaking down "Fitness Classes" into "Strength Training", "Cardio", etc)
 * ability to set a calendar reminder or clock alarm for an event
