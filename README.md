@@ -1,12 +1,8 @@
 # gym-schedule
 
-An Android app written in Kotlin that retrieves and displays the daily gym schedule for [Markham Rudy Bratty YMCA](https://ymcagta.org/find-a-y/markham-rudy-bratty-ymca).
+An Android app written in Kotlin that retrieves and displays the daily gym schedule for [Markham Rudy Bratty YMCA](https://ymcagta.org/find-a-y/markham-rudy-bratty-ymca). Users can view event details such as start and end time, age range, and registration fees.
 
-![full schedule](/images/full_schedule.png)
-
-Users can view event details such as start and end time, age range, and registration fees.
-
-![expanded event](/images/full_schedule_expanded.png)
+![full schedule](/images/full_schedule.png) ![expanded event](/images/full_schedule_expanded.png)
 
 Users can also filter the schedule to only show events that they're interested in.
 
