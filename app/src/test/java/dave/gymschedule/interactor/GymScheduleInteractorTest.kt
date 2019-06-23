@@ -33,6 +33,7 @@ class GymScheduleInteractorTest {
 
     @Test
     fun `should return unmodified gym schedule list when no event types are saved`() {
+        // Arrange
         val date = Calendar.getInstance()
         val gymEventViewModels = listOf(
                 createGenericGymEventViewModel(EventType.POOL_ACTIVITIES)
@@ -41,12 +42,18 @@ class GymScheduleInteractorTest {
         `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(Single.just(gymEventViewModels))
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(Observable.just(mapOf()))
 
-        val list = interactor.getGymEventViewModelsObservable(date).test()
+        // Act
+        val list = interactor.getGymEventViewModelsObservable(date)
+                .test()
+                .assertValueCount(1)
+
+        // Assert
         assertEquals(gymEventViewModels, list.values()[0])
     }
 
     @Test
     fun `should filter gym schedule list when enabled event types are saved`() {
+        // Arrange
         val date = Calendar.getInstance()
         val gymEventViewModels = listOf(
                 createGenericGymEventViewModel(EventType.POOL_ACTIVITIES),
@@ -61,12 +68,18 @@ class GymScheduleInteractorTest {
                 Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to true))
         )
 
-        val list = interactor.getGymEventViewModelsObservable(date).test()
+        // Act
+        val list = interactor.getGymEventViewModelsObservable(date)
+                .test()
+                .assertValueCount(1)
+
+        // Assert
         assertEquals(listOf(createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)), list.values()[0])
     }
 
     @Test
     fun `should not filter gym schedule list when all saved event types are disabled`() {
+        // Arrange
         val date = Calendar.getInstance()
         val gymEventViewModels = listOf(
                 createGenericGymEventViewModel(EventType.POOL_ACTIVITIES),
@@ -81,7 +94,12 @@ class GymScheduleInteractorTest {
                 Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to false))
         )
 
-        val list = interactor.getGymEventViewModelsObservable(date).test()
+        // Act
+        val list = interactor.getGymEventViewModelsObservable(date)
+                .test()
+                .assertValueCount(1)
+
+        // Assert
         assertEquals(gymEventViewModels, list.values()[0])
     }
 

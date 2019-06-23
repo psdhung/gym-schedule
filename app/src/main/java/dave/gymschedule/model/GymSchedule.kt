@@ -3,7 +3,7 @@ package dave.gymschedule.model
 import com.google.gson.annotations.SerializedName
 
 
-data class Gym(
+data class GymSchedule(
         val centreId: Int,
 
         @SerializedName("classes")

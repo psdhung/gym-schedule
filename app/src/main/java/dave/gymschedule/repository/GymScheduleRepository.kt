@@ -18,13 +18,13 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
         val startDateTime = "${getFormattedDateString(date)}+12:00:00+AM"
         val endDateTime = "${getFormattedDateString(date)}+11:59:59+PM"
         Log.d(TAG, "getting gym events for date $date")
-        val gymEventsSingle = ymcaService.getGymSchedule(startDateTime, endDateTime)
-        return gymEventsSingle.map { gym ->
-            val gymEvents = mutableListOf<GymEventViewModel>()
+        val gymScheduleSingle = ymcaService.getGymSchedule(startDateTime, endDateTime)
+        return gymScheduleSingle.map { gym ->
+            val gymEventViewModels = mutableListOf<GymEventViewModel>()
 
-            gym.events.forEach {
-                it.events.forEach { gymEvent ->
-                    gymEvents.add(GymEventViewModel(
+            gym.events.forEach {gymEvents ->
+                gymEvents.events.forEach { gymEvent ->
+                    gymEventViewModels.add(GymEventViewModel(
                             gymEvent.name,
                             EventType.getEventTypeFromId(gymEvent.eventType),
                             gymEvent.details,
@@ -40,7 +40,7 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
                 }
             }
 
-            gymEvents
+            gymEventViewModels
         }
     }
 
