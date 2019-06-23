@@ -6,7 +6,6 @@ import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -33,27 +32,11 @@ class GymScheduleInteractorTest {
     }
 
     @Test
-    fun `should return unmodified gym schedule when no event types are saved`() {
+    fun `should return unmodified gym schedule list when no event types are saved`() {
         val date = Calendar.getInstance()
         val gymEventViewModels = listOf(
-                GymEventViewModel(
-                        "name",
-                        EventType.POOL_ACTIVITIES,
-                        "details",
-                        "startTime",
-                        "endTime",
-                        "location",
-                        "description",
-                        "fee",
-                        false,
-                        "ageRange",
-                        "registration",
-                        false
-                )
+                createGenericGymEventViewModel(EventType.POOL_ACTIVITIES)
         )
-
-        val behaviourSubject = BehaviorSubject.create<Map<Int, Boolean>>()
-        behaviourSubject.onNext(mapOf())
 
         `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(Single.just(gymEventViewModels))
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(Observable.just(mapOf()))
@@ -62,4 +45,60 @@ class GymScheduleInteractorTest {
         assertEquals(gymEventViewModels, list.values()[0])
     }
 
+    @Test
+    fun `should filter gym schedule list when enabled event types are saved`() {
+        val date = Calendar.getInstance()
+        val gymEventViewModels = listOf(
+                createGenericGymEventViewModel(EventType.POOL_ACTIVITIES),
+                createGenericGymEventViewModel(EventType.FITNESS_CLASSES),
+                createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)
+        )
+
+        `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(
+                Single.just(gymEventViewModels)
+        )
+        `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
+                Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to true))
+        )
+
+        val list = interactor.getGymEventViewModelsObservable(date).test()
+        assertEquals(listOf(createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)), list.values()[0])
+    }
+
+    @Test
+    fun `should not filter gym schedule list when all saved event types are disabled`() {
+        val date = Calendar.getInstance()
+        val gymEventViewModels = listOf(
+                createGenericGymEventViewModel(EventType.POOL_ACTIVITIES),
+                createGenericGymEventViewModel(EventType.FITNESS_CLASSES),
+                createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)
+        )
+
+        `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(
+                Single.just(gymEventViewModels)
+        )
+        `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
+                Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to false))
+        )
+
+        val list = interactor.getGymEventViewModelsObservable(date).test()
+        assertEquals(gymEventViewModels, list.values()[0])
+    }
+
+    private fun createGenericGymEventViewModel(eventType: EventType): GymEventViewModel {
+        return GymEventViewModel(
+                "${eventType}Name",
+                eventType,
+                "${eventType}Details",
+                "${eventType}StartTime",
+                "${eventType}EndTime",
+                "${eventType}Location",
+                "${eventType}Description",
+                "${eventType}Fee",
+                false,
+                "${eventType}AgeRange",
+                "${eventType}Registration",
+                false
+        )
+    }
 }
