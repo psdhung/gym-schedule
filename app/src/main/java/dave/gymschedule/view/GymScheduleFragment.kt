@@ -61,7 +61,12 @@ class GymScheduleFragment : DaggerFragment() {
                 .observeOn(mainThread())
                 .subscribe({ visibleEvents ->
                     Log.d(TAG, "got events for date ${date.time}, revealing page")
-                    adapter.gymEvents = visibleEvents
+
+                    if (visibleEvents.isEmpty()) {
+                        showErrorMessage("No events found")
+                    } else {
+                        adapter.gymEvents = visibleEvents
+                    }
                     hideLoadingIndicator()
                 }, { error ->
                     Log.d(TAG, "failed to retrieve schedule", error)
@@ -75,8 +80,12 @@ class GymScheduleFragment : DaggerFragment() {
         loading_text?.visibility = View.INVISIBLE
     }
 
-    private fun showErrorMessage(errorMessage: String, error: Throwable) {
-        error_text?.text = String.format("%s\n\n%s", errorMessage, error.message)
+    private fun showErrorMessage(errorMessage: String, error: Throwable? = null) {
+        if (error == null) {
+            error_text?.text = errorMessage
+        } else {
+            error_text?.text = String.format("%s\n\n%s", errorMessage, error?.message)
+        }
         error_text?.visibility = View.VISIBLE
     }
 
