@@ -12,7 +12,8 @@ class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleReposi
 
     fun getGymEventViewModelsObservable(date: Calendar): Observable<List<GymEventViewModel>> {
         return Observable.combineLatest(
-                gymScheduleRepository.getGymEventsViewModelSingle(date).toObservable(),
+                // TODO let user select the centre and pass in the ID here
+                gymScheduleRepository.getGymEventsViewModelSingle(39, date).toObservable(),
                 eventTypeStateRepository.eventTypeStateObservable,
                 BiFunction { gymEventViewModels, eventTypeMap ->
                     if (eventTypeMap.isEmpty() || eventTypeMap.all { !it.value }) {

@@ -22,7 +22,7 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
       */
     private val gymEventViewModelsCache = mutableMapOf<String, List<GymEventViewModel>>()
 
-    fun getGymEventsViewModelSingle(date: Calendar): Single<List<GymEventViewModel>> {
+    fun getGymEventsViewModelSingle(centreId: Int, date: Calendar): Single<List<GymEventViewModel>> {
         val formattedDateString = getFormattedDateString(date)
 
         val cachedGymEventViewModels = gymEventViewModelsCache[formattedDateString]
@@ -34,7 +34,7 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
         val startDateTime = "$formattedDateString+12:00:00+AM"
         val endDateTime = "$formattedDateString+11:59:59+PM"
         Log.d(TAG, "getting gym events for date ${date.time}")
-        val gymScheduleSingle = ymcaService.getGymSchedule(startDateTime, endDateTime)
+        val gymScheduleSingle = ymcaService.getGymSchedule(centreId, startDateTime, endDateTime)
         return gymScheduleSingle.map { gym ->
             val gymEventViewModels = mutableListOf<GymEventViewModel>()
 

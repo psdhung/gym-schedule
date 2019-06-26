@@ -9,6 +9,7 @@ interface YmcaService {
 
     @GET("api/Classes/GetByCentreId?centreId=39")
     fun getGymSchedule(
+            @Query("centreId") centreId: Int,
             @Query("startDateTime", encoded = true) startDateTime: String,
             @Query("endDateTime", encoded = true) endDateTime: String
     ): Single<GymSchedule>
