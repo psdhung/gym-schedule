@@ -14,15 +14,31 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
         private val TAG = GymScheduleRepository::class.java.simpleName
     }
 
+    /*
+     The responses for the gym schedule always have max-age=0 so OkHttp won't cache the result.
+     Use a memory cache for now to reduce the number of network calls.
+
+     TODO Add a network interceptor to OkHttp to set max-age to a non-zero number and remove this memory cache.
+      */
+    private val gymEventViewModelsCache = mutableMapOf<String, List<GymEventViewModel>>()
+
     fun getGymEventsViewModelSingle(date: Calendar): Single<List<GymEventViewModel>> {
-        val startDateTime = "${getFormattedDateString(date)}+12:00:00+AM"
-        val endDateTime = "${getFormattedDateString(date)}+11:59:59+PM"
-        Log.d(TAG, "getting gym events for date $date")
+        val formattedDateString = getFormattedDateString(date)
+
+        val cachedGymEventViewModels = gymEventViewModelsCache[formattedDateString]
+        if (!cachedGymEventViewModels.isNullOrEmpty()) {
+            Log.d(TAG, "cache hit for date ${date.time}")
+            return Single.just(cachedGymEventViewModels)
+        }
+
+        val startDateTime = "$formattedDateString+12:00:00+AM"
+        val endDateTime = "$formattedDateString+11:59:59+PM"
+        Log.d(TAG, "getting gym events for date ${date.time}")
         val gymScheduleSingle = ymcaService.getGymSchedule(startDateTime, endDateTime)
         return gymScheduleSingle.map { gym ->
             val gymEventViewModels = mutableListOf<GymEventViewModel>()
 
-            gym.events.forEach {gymEvents ->
+            gym.events.forEach { gymEvents ->
                 gymEvents.events.forEach { gymEvent ->
                     gymEventViewModels.add(GymEventViewModel(
                             gymEvent.name,
@@ -40,6 +56,8 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
                 }
             }
 
+
+            gymEventViewModelsCache[formattedDateString] = gymEventViewModels
             gymEventViewModels
         }
     }
