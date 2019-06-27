@@ -64,7 +64,8 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
                                         )
                                     }
                                 }
-                                .setTitle("Pick a location")
+                                .setCancelable(false)
+                                .setTitle(getString(R.string.gym_location_dialog_title))
                                 .create()
                                 .show()
                     } else {

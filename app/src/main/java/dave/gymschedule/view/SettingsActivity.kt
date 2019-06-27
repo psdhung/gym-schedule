@@ -75,9 +75,7 @@ class SettingsActivity : DaggerAppCompatActivity() {
         val gymLocationAdapter = GymLocationAdapter(this, GymLocation.values().asList())
         gym_location_spinner.adapter = gymLocationAdapter
         gym_location_spinner.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 disposables.add(gymLocationRepository.setSavedGymLocationId(gymLocationAdapter.getLocationId(position))
@@ -90,7 +88,6 @@ class SettingsActivity : DaggerAppCompatActivity() {
                         })
                 )
             }
-
         }
 
         gym_location_spinner.setSelection(GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId()).ordinal)
