@@ -2,6 +2,7 @@ package dave.gymschedule.interactor
 
 import dave.gymschedule.database.GymLocationRepository
 import dave.gymschedule.model.GymEventViewModel
+import dave.gymschedule.model.Resource
 import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
 import io.reactivex.Observable
@@ -13,20 +14,27 @@ class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleReposi
                             private val eventTypeStateRepository: EventTypeStateRepository,
                             private val gymLocationRepository: GymLocationRepository) {
 
-    fun getGymEventViewModelsObservable(date: Calendar): Observable<List<GymEventViewModel>> {
+    fun getGymEventViewModelsObservable(date: Calendar): Observable<Resource<List<GymEventViewModel>>> {
         return Observable.combineLatest(
                 gymLocationRepository.savedGymLocationIdObservable
                         .observeOn(io())
                         .flatMap { savedGymLocationId ->
-                            gymScheduleRepository.getGymEventsViewModelSingle(savedGymLocationId, date).toObservable()
+                            gymScheduleRepository.getGymEventsViewModelObservable(savedGymLocationId, date)
                         },
                 eventTypeStateRepository.eventTypeStateObservable,
-                BiFunction { gymEventViewModels, eventTypeMap ->
-                    if (eventTypeMap.isEmpty() || eventTypeMap.all { !it.value }) {
-                        gymEventViewModels
+                BiFunction { gymEventViewModelsResource, eventTypeMap ->
+                    if (gymEventViewModelsResource.status == Resource.Status.LOADING) {
+                        Resource(Resource.Status.LOADING, listOf())
+                    } else if (gymEventViewModelsResource.status == Resource.Status.ERROR) {
+                        Resource(Resource.Status.ERROR, listOf(), gymEventViewModelsResource.error)
                     } else {
-                        gymEventViewModels.filter {
-                            eventTypeMap[it.eventType.eventTypeId] ?: false
+                        val gymEventViewModels = gymEventViewModelsResource.data
+                        if (eventTypeMap.isEmpty() || eventTypeMap.all { !it.value }) {
+                            Resource(Resource.Status.SUCCESS, gymEventViewModels)
+                        } else {
+                            Resource(Resource.Status.SUCCESS, gymEventViewModels.filter {
+                                eventTypeMap[it.eventType.eventTypeId] ?: false
+                            })
                         }
                     }
                 }

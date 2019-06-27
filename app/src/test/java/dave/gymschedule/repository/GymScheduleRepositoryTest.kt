@@ -56,7 +56,7 @@ class GymScheduleRepositoryTest {
         )
 
         // Act
-        val gymEventViewModels = repository.getGymEventsViewModelSingle(date)
+        val gymEventViewModels = repository.getGymEventsViewModelObservable(date)
                 .test()
                 .assertValueCount(1)
 
@@ -90,7 +90,7 @@ class GymScheduleRepositoryTest {
         )
 
         // Act
-        val gymEventViewModels = repository.getGymEventsViewModelSingle(date)
+        val gymEventViewModels = repository.getGymEventsViewModelObservable(date)
                 .test()
                 .assertValueCount(1)
 

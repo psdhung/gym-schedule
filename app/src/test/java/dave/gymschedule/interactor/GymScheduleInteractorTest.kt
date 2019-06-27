@@ -39,7 +39,7 @@ class GymScheduleInteractorTest {
                 createGenericGymEventViewModel(EventType.POOL_ACTIVITIES)
         )
 
-        `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(Single.just(gymEventViewModels))
+        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(date)).thenReturn(Single.just(gymEventViewModels))
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(Observable.just(mapOf()))
 
         // Act
@@ -61,7 +61,7 @@ class GymScheduleInteractorTest {
                 createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)
         )
 
-        `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(
+        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(date)).thenReturn(
                 Single.just(gymEventViewModels)
         )
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
@@ -87,7 +87,7 @@ class GymScheduleInteractorTest {
                 createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)
         )
 
-        `when`(mockGymScheduleRepository.getGymEventsViewModelSingle(date)).thenReturn(
+        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(date)).thenReturn(
                 Single.just(gymEventViewModels)
         )
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
