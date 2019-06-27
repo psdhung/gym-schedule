@@ -2,12 +2,15 @@ package dave.gymschedule.view
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
 import dave.gymschedule.database.GymLocationRepository
 import dave.gymschedule.model.EventType
+import dave.gymschedule.model.GymLocation
 import dave.gymschedule.presenter.SettingsPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
@@ -68,6 +71,29 @@ class SettingsActivity : DaggerAppCompatActivity() {
                 }, {
                     Log.d(TAG, "failed to get event type states from repository", it)
                 }))
+
+        val gymLocationAdapter = GymLocationAdapter(this, GymLocation.values().asList())
+        gym_location_spinner.adapter = gymLocationAdapter
+        gym_location_spinner.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                disposables.add(gymLocationRepository.setSavedGymLocationId(gymLocationAdapter.getLocationId(position))
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribe({
+
+                        }, {
+
+                        })
+                )
+            }
+
+        }
+
+        gym_location_spinner.setSelection(GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId()).ordinal)
     }
 
 }

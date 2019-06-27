@@ -6,6 +6,7 @@ import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers.io
 import java.util.Calendar
 
 class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleRepository,
@@ -14,9 +15,11 @@ class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleReposi
 
     fun getGymEventViewModelsObservable(date: Calendar): Observable<List<GymEventViewModel>> {
         return Observable.combineLatest(
-                gymLocationRepository.savedGymLocationIdObservable.flatMap { savedGymLocationId ->
-                    gymScheduleRepository.getGymEventsViewModelSingle(savedGymLocationId, date).toObservable()
-                },
+                gymLocationRepository.savedGymLocationIdObservable
+                        .observeOn(io())
+                        .flatMap { savedGymLocationId ->
+                            gymScheduleRepository.getGymEventsViewModelSingle(savedGymLocationId, date).toObservable()
+                        },
                 eventTypeStateRepository.eventTypeStateObservable,
                 BiFunction { gymEventViewModels, eventTypeMap ->
                     if (eventTypeMap.isEmpty() || eventTypeMap.all { !it.value }) {

@@ -5,6 +5,7 @@
     <string name="action_settings_title">settings</string>
 
     <string name="settings_activity_title">Settings</string>
+    <string name="settings_gym_location_header">Gym Location</string>
     <string name="settings_event_header">Events</string>
 
     <string name="child_minding_available">child minding available</string>
