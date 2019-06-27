@@ -1,12 +1,45 @@
 <resources>
+    <string name="app_shared_preferences_file_key">gym-schedule-app-shared-preferences-key</string>
     <string name="app_name">Gym Schedule</string>
     <string name="schedule_loading_text">Loading…</string>
     <string name="action_settings_title">settings</string>
+
     <string name="settings_activity_title">Settings</string>
     <string name="settings_event_header">Events</string>
+
     <string name="child_minding_available">child minding available</string>
     <string name="event_description_header">Description:</string>
     <string name="event_fee_header">Fee:</string>
     <string name="event_age_range_header">Age range:</string>
     <string name="event_registration_header">Registration:</string>
+
+    <string name="error_no_events">No events found</string>
+    <string name="error_schedule_retrieval_failed">Could not retrieve schedule</string>
+
+    <string name="gym_location_name_markham">Markham Rudy Bratty YMCA</string>
+    <string name="gym_location_address_markham">101 YMCA Boulevard, Markham</string>
+
+    <string name="gym_location_name_central">Central YMCA</string>
+    <string name="gym_location_address_central">20 Grosvenor Street, Toronto</string>
+
+    <string name="gym_location_name_oshawa">Oshawa YMCA</string>
+    <string name="gym_location_address_oshawa">99 Mary Street North, Oshawa</string>
+
+    <string name="gym_location_name_brampton">Brampton YMCA</string>
+    <string name="gym_location_address_brampton">20 Union Street, Brampton</string>
+
+    <string name="gym_location_name_mississauga">Mississauga YMCA</string>
+    <string name="gym_location_address_mississauga">325 Burnhamthorpe Road West, Mississauga</string>
+
+    <string name="gym_location_name_scarborough">Scarborough Centre YMCA</string>
+    <string name="gym_location_address_scarborough">230 Town Centre Court, Scarborough</string>
+
+    <string name="gym_location_name_north_york">North York YMCA</string>
+    <string name="gym_location_address_north_york">567 Sheppard Avenue East, North York </string>
+
+    <string name="gym_location_name_west_end">West End YMCA</string>
+    <string name="gym_location_address_west_end">931 College Street, Toronto</string>
+
+    <string name="gym_location_name_downtown">Cooper Koo Family YMCA</string>
+    <string name="gym_location_address_downtown">461 Cherry St, Toronto</string>
 </resources>

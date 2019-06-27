@@ -5,6 +5,7 @@ import dagger.android.ContributesAndroidInjector
 import dave.gymschedule.view.SettingsActivity
 import dave.gymschedule.view.GymScheduleActivity
 import dave.gymschedule.view.GymScheduleFragment
+import dave.gymschedule.view.SplashScreenActivity
 
 @Module
 abstract class BuildersModule {
@@ -18,4 +19,6 @@ abstract class BuildersModule {
     @ContributesAndroidInjector
     abstract fun bindGymScheduleFragment() : GymScheduleFragment
 
+    @ContributesAndroidInjector
+    abstract fun bindSplashScreenActivity(): SplashScreenActivity
 }

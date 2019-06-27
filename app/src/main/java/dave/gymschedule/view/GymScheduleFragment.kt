@@ -63,7 +63,7 @@ class GymScheduleFragment : DaggerFragment() {
                     Log.d(TAG, "got events for date ${date.time}, revealing page")
 
                     if (visibleEvents.isEmpty()) {
-                        showErrorMessage("No events found")
+                        showErrorMessage(getString(R.string.error_no_events))
                     } else {
                         adapter.gymEvents = visibleEvents
                     }
@@ -71,7 +71,7 @@ class GymScheduleFragment : DaggerFragment() {
                 }, { error ->
                     Log.d(TAG, "failed to retrieve schedule", error)
                     hideLoadingIndicator()
-                    showErrorMessage("Could not retrieve schedule", error)
+                    showErrorMessage(getString(R.string.error_schedule_retrieval_failed), error)
                 })
         )
     }
@@ -84,7 +84,7 @@ class GymScheduleFragment : DaggerFragment() {
         if (error == null) {
             error_text?.text = errorMessage
         } else {
-            error_text?.text = String.format("%s\n\n%s", errorMessage, error?.message)
+            error_text?.text = String.format("%s\n\n%s", errorMessage, error.message)
         }
         error_text?.visibility = View.VISIBLE
     }

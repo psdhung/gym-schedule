@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="gym_locations_array">
+        <item>Markham</item>
+        <item>Scarborough</item>
+    </array>
+</resources>

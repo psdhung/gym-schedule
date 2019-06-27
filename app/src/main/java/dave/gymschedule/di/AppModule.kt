@@ -5,7 +5,9 @@ import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
+import dave.gymschedule.R
 import dave.gymschedule.database.AppDatabase
+import dave.gymschedule.database.GymLocationRepository
 import dave.gymschedule.interactor.GymScheduleInteractor
 import dave.gymschedule.presenter.GymSchedulePresenter
 import dave.gymschedule.presenter.SettingsPresenter
@@ -73,8 +75,9 @@ class AppModule {
     @Singleton
     fun providesGymScheduleInteractor(
             gymScheduleRepository: GymScheduleRepository,
-            eventTypeStateRepository: EventTypeStateRepository): GymScheduleInteractor {
-        return GymScheduleInteractor(gymScheduleRepository, eventTypeStateRepository)
+            eventTypeStateRepository: EventTypeStateRepository,
+            gymLocationRepository: GymLocationRepository): GymScheduleInteractor {
+        return GymScheduleInteractor(gymScheduleRepository, eventTypeStateRepository, gymLocationRepository)
     }
 
     @Provides
@@ -93,5 +96,11 @@ class AppModule {
     @Singleton
     fun providesSettingsPresenter(eventTypeStateRepository: EventTypeStateRepository): SettingsPresenter {
         return SettingsPresenter(eventTypeStateRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesGymLocationRepository(@ApplicationContext context: Context): GymLocationRepository {
+        return GymLocationRepository(context.getSharedPreferences(context.getString(R.string.app_shared_preferences_file_key), Context.MODE_PRIVATE))
     }
 }

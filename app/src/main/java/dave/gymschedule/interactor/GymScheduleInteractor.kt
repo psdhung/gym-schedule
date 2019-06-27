@@ -1,5 +1,6 @@
 package dave.gymschedule.interactor
 
+import dave.gymschedule.database.GymLocationRepository
 import dave.gymschedule.model.GymEventViewModel
 import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
@@ -8,12 +9,14 @@ import io.reactivex.functions.BiFunction
 import java.util.Calendar
 
 class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleRepository,
-                            private val eventTypeStateRepository: EventTypeStateRepository) {
+                            private val eventTypeStateRepository: EventTypeStateRepository,
+                            private val gymLocationRepository: GymLocationRepository) {
 
     fun getGymEventViewModelsObservable(date: Calendar): Observable<List<GymEventViewModel>> {
         return Observable.combineLatest(
-                // TODO let user select the centre and pass in the ID here
-                gymScheduleRepository.getGymEventsViewModelSingle(39, date).toObservable(),
+                gymLocationRepository.savedGymLocationIdObservable.flatMap { savedGymLocationId ->
+                    gymScheduleRepository.getGymEventsViewModelSingle(savedGymLocationId, date).toObservable()
+                },
                 eventTypeStateRepository.eventTypeStateObservable,
                 BiFunction { gymEventViewModels, eventTypeMap ->
                     if (eventTypeMap.isEmpty() || eventTypeMap.all { !it.value }) {
@@ -26,5 +29,4 @@ class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleReposi
                 }
         )
     }
-
 }

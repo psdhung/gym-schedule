@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface YmcaService {
 
-    @GET("api/Classes/GetByCentreId?centreId=39")
+    @GET("api/Classes/GetByCentreId")
     fun getGymSchedule(
             @Query("centreId") centreId: Int,
             @Query("startDateTime", encoded = true) startDateTime: String,

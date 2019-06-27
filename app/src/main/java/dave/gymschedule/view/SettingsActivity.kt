@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
+import dave.gymschedule.database.GymLocationRepository
 import dave.gymschedule.model.EventType
 import dave.gymschedule.presenter.SettingsPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
@@ -22,6 +23,9 @@ class SettingsActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var presenter: SettingsPresenter
+
+    @Inject
+    lateinit var gymLocationRepository: GymLocationRepository
 
     private val disposables = CompositeDisposable()
 
