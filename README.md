@@ -5,6 +5,7 @@ An Android app written in Kotlin that retrieves and displays the daily gym sched
 ![settings screen](/images/settings_screen.png) ![location picker](/images/location_picker.png)
 
 Users can view event details such as start and end time, age range, and registration fees.
+
 ![full schedule](/images/full_schedule.png) ![expanded event](/images/full_schedule_expanded.png)
 
 Users can also filter the schedule to only show events that they're interested in.
