@@ -25,7 +25,7 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
     private val gymEventViewModelsCache = mutableMapOf<String, List<GymEventViewModel>>()
 
     fun getGymEventsViewModelObservable(centreId: Int, date: Calendar): Observable<Resource<List<GymEventViewModel>>> {
-        return Observable.create<Resource<List<GymEventViewModel>>> { emitter ->
+        return Observable.create { emitter ->
             val formattedDateString = getFormattedDateString(date)
 
             val cachedGymEventViewModels = gymEventViewModelsCache["$centreId-$formattedDateString"]

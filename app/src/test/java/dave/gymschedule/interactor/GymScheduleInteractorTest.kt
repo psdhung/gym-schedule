@@ -1,13 +1,16 @@
 package dave.gymschedule.interactor
 
+import dave.gymschedule.Rx2SchedulersOverrideRule
+import dave.gymschedule.database.GymLocationRepository
 import dave.gymschedule.model.EventType
 import dave.gymschedule.model.GymEventViewModel
+import dave.gymschedule.model.Resource
 import dave.gymschedule.repository.EventTypeStateRepository
 import dave.gymschedule.repository.GymScheduleRepository
 import io.reactivex.Observable
-import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -18,17 +21,24 @@ import java.util.Calendar
 @RunWith(MockitoJUnitRunner::class)
 class GymScheduleInteractorTest {
 
+    @get:Rule
+    val rule = Rx2SchedulersOverrideRule()
+
     @Mock
     lateinit var mockGymScheduleRepository: GymScheduleRepository
 
     @Mock
     lateinit var mockEventTypeStateRepository: EventTypeStateRepository
 
+    @Mock
+    lateinit var mockGymLocationRepository: GymLocationRepository
+
     private lateinit var interactor: GymScheduleInteractor
 
     @Before
     fun setUp() {
-        interactor = GymScheduleInteractor(mockGymScheduleRepository, mockEventTypeStateRepository)
+        `when`(mockGymLocationRepository.savedGymLocationIdObservable).thenReturn(Observable.just(1))
+        interactor = GymScheduleInteractor(mockGymScheduleRepository, mockEventTypeStateRepository, mockGymLocationRepository)
     }
 
     @Test
@@ -39,7 +49,7 @@ class GymScheduleInteractorTest {
                 createGenericGymEventViewModel(EventType.POOL_ACTIVITIES)
         )
 
-        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(date)).thenReturn(Single.just(gymEventViewModels))
+        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(1, date)).thenReturn(Observable.just(Resource(Resource.Status.SUCCESS, gymEventViewModels)))
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(Observable.just(mapOf()))
 
         // Act
@@ -48,7 +58,7 @@ class GymScheduleInteractorTest {
                 .assertValueCount(1)
 
         // Assert
-        assertEquals(gymEventViewModels, list.values()[0])
+        assertEquals(gymEventViewModels, list.values()[0].data)
     }
 
     @Test
@@ -61,8 +71,8 @@ class GymScheduleInteractorTest {
                 createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)
         )
 
-        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(date)).thenReturn(
-                Single.just(gymEventViewModels)
+        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(1, date)).thenReturn(
+                Observable.just(Resource(Resource.Status.SUCCESS, gymEventViewModels))
         )
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
                 Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to true))
@@ -74,7 +84,7 @@ class GymScheduleInteractorTest {
                 .assertValueCount(1)
 
         // Assert
-        assertEquals(listOf(createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)), list.values()[0])
+        assertEquals(listOf(createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)), list.values()[0].data)
     }
 
     @Test
@@ -87,8 +97,8 @@ class GymScheduleInteractorTest {
                 createGenericGymEventViewModel(EventType.SPORTS_AND_RECREATION)
         )
 
-        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(date)).thenReturn(
-                Single.just(gymEventViewModels)
+        `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(1, date)).thenReturn(
+                Observable.just(Resource(Resource.Status.SUCCESS, gymEventViewModels))
         )
         `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
                 Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to false))
@@ -100,7 +110,7 @@ class GymScheduleInteractorTest {
                 .assertValueCount(1)
 
         // Assert
-        assertEquals(gymEventViewModels, list.values()[0])
+        assertEquals(gymEventViewModels, list.values()[0].data)
     }
 
     private fun createGenericGymEventViewModel(eventType: EventType): GymEventViewModel {
