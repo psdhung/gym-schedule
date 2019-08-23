@@ -17,7 +17,8 @@
     <Spinner
         android:id="@+id/gym_location_spinner"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/gym_location" />
 
     <TextView
         style="@style/TextAppearance.AppCompat.Headline"
