@@ -42,7 +42,6 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
                 try {
                     val gym = ymcaService.getGymSchedule(centreId, startDateTime, endDateTime).execute().body()
 
-//                gymScheduleSingle.map { gym ->
                     val gymEventViewModels = mutableListOf<GymEventViewModel>()
 
                     gym?.events?.forEach { gymEvents ->
@@ -65,7 +64,6 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
 
                     gymEventViewModelsCache["$centreId-$formattedDateString"] = gymEventViewModels
                     emitter.onNext(Resource(Resource.Status.SUCCESS, gymEventViewModels))
-//                }
                 } catch (exception: Exception) {
                     emitter.onNext(Resource(Resource.Status.ERROR, listOf(), exception))
                 }
