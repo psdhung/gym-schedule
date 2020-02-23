@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,73 +12,7 @@
         android:orientation="vertical"
         android:padding="5dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/details_wrapper"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/event_time_wrapper"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/event_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scrollHorizontally="false"
-                    android:textSize="@dimen/title_text_size"
-                    android:textStyle="bold"
-                    tools:text="really really really really long name" />
-
-                <TextView
-                    android:id="@+id/event_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scrollHorizontally="false"
-                    tools:text="really really really really long details" />
-
-                <TextView
-                    android:id="@+id/event_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scrollHorizontally="false"
-                    tools:text="really really really really long location" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/event_time_wrapper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/event_start_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    android:textSize="@dimen/regular_text_size"
-                    tools:text="10:00 AM" />
-
-                <TextView
-                    android:id="@+id/event_end_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    android:textSize="@dimen/regular_text_size"
-                    tools:text="12:00 PM" />
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <include layout="@layout/gym_event_summary" />
 
         <LinearLayout
             android:id="@+id/event_expanded_section"

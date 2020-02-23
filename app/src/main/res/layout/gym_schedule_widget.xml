@@ -2,10 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical"
-    android:background="@android:color/transparent"
-    android:padding="@dimen/widget_margin"
-    tools:background="@android:color/darker_gray">
+    android:padding="@dimen/widget_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,12 +18,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:shadowColor="@android:color/black"
-            android:shadowRadius="2dp"
-            android:text="Markham Ruddy Bratty Road"
-            android:textColor="#ffffff"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Markham Ruddy Bratty Road" />
 
         <ImageButton
             android:layout_width="40dp"
@@ -43,5 +39,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        tools:listitem="@layout/gym_event_summary" />
+
 </LinearLayout>
