@@ -2,7 +2,7 @@ package dave.gymschedule
 
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
-import dave.gymschedule.di.DaggerAppComponent
+import dave.gymschedule.common.di.DaggerAppComponent
 
 class GymScheduleApplication : DaggerApplication() {
 

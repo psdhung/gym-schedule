@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".view.SettingsActivity">
+    tools:context=".settings.view.SettingsActivity">
 
     <TextView
         style="@style/TextAppearance.AppCompat.Headline"

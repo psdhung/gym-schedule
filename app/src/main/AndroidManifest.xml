@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dave.gymschedule">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".GymScheduleApplication"
         android:allowBackup="true"
@@ -14,29 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <activity
-            android:name=".view.SplashScreenActivity"
+            android:name=".SplashScreenActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".view.GymScheduleActivity"
+            android:name=".schedule.view.GymScheduleActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.SettingsActivity"
-            android:parentActivityName=".view.GymScheduleActivity" />
+            android:name=".settings.view.SettingsActivity"
+            android:parentActivityName=".schedule.view.GymScheduleActivity" />
+        <receiver android:name=".widget.GymScheduleWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/gym_schedule_widget_info" />
+        </receiver>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -1,12 +1,13 @@
 package dave.gymschedule.interactor
 
 import dave.gymschedule.Rx2SchedulersOverrideRule
-import dave.gymschedule.database.GymLocationRepository
-import dave.gymschedule.model.EventType
-import dave.gymschedule.model.GymEventViewModel
-import dave.gymschedule.model.Resource
-import dave.gymschedule.repository.EventTypeStateRepository
-import dave.gymschedule.repository.GymScheduleRepository
+import dave.gymschedule.common.database.GymLocationRepository
+import dave.gymschedule.common.model.EventType
+import dave.gymschedule.schedule.model.GymEventViewModel
+import dave.gymschedule.common.model.Resource
+import dave.gymschedule.settings.repository.EventTypeStateRepository
+import dave.gymschedule.schedule.repository.GymScheduleRepository
+import dave.gymschedule.schedule.interactor.GymScheduleInteractor
 import io.reactivex.Observable
 import org.junit.Assert.assertEquals
 import org.junit.Before

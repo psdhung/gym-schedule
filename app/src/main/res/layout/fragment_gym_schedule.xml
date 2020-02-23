@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/event_list_background_color"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="dave.gymschedule.view.GymScheduleActivity">
+    tools:context="dave.gymschedule.schedule.view.GymScheduleActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gym_events_recycler_view"

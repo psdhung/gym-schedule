@@ -45,4 +45,7 @@
 
     <string name="gym_location_name_downtown">Cooper Koo Family YMCA</string>
     <string name="gym_location_address_downtown">461 Cherry St, Toronto</string>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

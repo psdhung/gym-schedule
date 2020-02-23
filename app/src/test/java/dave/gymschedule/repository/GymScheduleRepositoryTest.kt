@@ -1,20 +1,11 @@
 package dave.gymschedule.repository
 
-import dave.gymschedule.model.EventType
-import dave.gymschedule.model.GymEvent
-import dave.gymschedule.model.GymEventViewModel
-import dave.gymschedule.model.GymEvents
-import dave.gymschedule.model.GymSchedule
-import dave.gymschedule.service.YmcaService
-import io.reactivex.Single
-import org.junit.Assert.assertEquals
+import dave.gymschedule.schedule.repository.GymScheduleRepository
+import dave.gymschedule.schedule.service.YmcaService
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
-import java.util.Calendar
 
 @RunWith(MockitoJUnitRunner::class)
 class GymScheduleRepositoryTest {
