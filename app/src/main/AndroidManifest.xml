@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dave.gymschedule">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".GymScheduleApplication"
         android:allowBackup="true"
@@ -32,6 +34,7 @@
         <activity
             android:name=".settings.view.SettingsActivity"
             android:parentActivityName=".schedule.view.GymScheduleActivity" />
+
         <receiver android:name=".widget.GymScheduleWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -42,7 +45,5 @@
                 android:resource="@xml/gym_schedule_widget_info" />
         </receiver>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

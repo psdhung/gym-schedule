@@ -25,4 +25,5 @@ abstract class BuildersModule {
 
     @ContributesAndroidInjector
     abstract fun bindGymScheduleWidget(): GymScheduleWidget
+
 }

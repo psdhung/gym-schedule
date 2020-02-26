@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
 import dave.gymschedule.common.database.GymLocationRepository
@@ -45,6 +44,7 @@ class GymScheduleActivity : DaggerAppCompatActivity() {
                     supportActionBar?.title = gymLocationName
                 }, {
                     Log.d(TAG, "error while getting gym location name", it)
+                    supportActionBar?.setTitle(R.string.error_gym_name_retrieval_failed)
                 }))
 
         schedule_pager.adapter = SchedulePagerAdapter(supportFragmentManager, Calendar.getInstance(), MAX_DAYS)

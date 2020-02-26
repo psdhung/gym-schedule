@@ -13,7 +13,7 @@ class SchedulePagerAdapter(fragmentManager: FragmentManager,
                            private val numDays: Int) : FragmentPagerAdapter(fragmentManager) {
 
     companion object {
-        private val DISPLAYED_DATE_FORMAT = SimpleDateFormat("EE MMM dd, yyyy", Locale.getDefault())
+        private val DISPLAYED_DATE_FORMAT get() = SimpleDateFormat("EE MMM dd, yyyy", Locale.getDefault())
     }
 
     override fun getItem(position: Int): Fragment {
