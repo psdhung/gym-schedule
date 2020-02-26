@@ -35,7 +35,6 @@ class GymScheduleActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_gym_schedule)
 
         setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar?.title = null
 
         disposables.add(gymLocationRepository.savedGymLocationIdObservable
                 .subscribeOn(io())
@@ -43,7 +42,7 @@ class GymScheduleActivity : DaggerAppCompatActivity() {
                 .subscribe({
                     val gymLocation = GymLocation.getGymLocationByLocationId(it)
                     val gymLocationName = getString(gymLocation.locationName)
-                    findViewById<TextView>(R.id.location_name).text = gymLocationName
+                    supportActionBar?.title = gymLocationName
                 }, {
                     Log.d(TAG, "error while getting gym location name", it)
                 }))
