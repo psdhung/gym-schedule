@@ -8,8 +8,10 @@ import android.util.Log
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import dave.gymschedule.R
+import dave.gymschedule.common.database.GymLocationRepository
 import dave.gymschedule.common.model.Resource
 import dave.gymschedule.schedule.presenter.GymSchedulePresenter
+import dave.gymschedule.settings.model.GymLocation
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers.io
@@ -24,6 +26,9 @@ class GymScheduleWidget : AppWidgetProvider() {
 
     @Inject
     lateinit var gymSchedulePresenter: GymSchedulePresenter
+
+    @Inject
+    lateinit var gymLocationRepository: GymLocationRepository
 
     private val disposables = CompositeDisposable()
 
@@ -49,6 +54,10 @@ class GymScheduleWidget : AppWidgetProvider() {
 
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         val views = RemoteViews(context.packageName, R.layout.gym_schedule_widget)
+        val gymLocation = GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId())
+        val gymLocationName = context.getString(gymLocation.locationName)
+
+        views.setTextViewText(R.id.widget_gym_location, gymLocationName)
 
         disposables.add(gymSchedulePresenter.getGymEventsForDate(Calendar.getInstance())
                 .subscribeOn(io())

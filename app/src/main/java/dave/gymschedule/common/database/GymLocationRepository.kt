@@ -40,10 +40,6 @@ class GymLocationRepository(private val sharedPreferences: SharedPreferences) {
                     .putInt(SAVED_GYM_LOCATION_ID_KEY, locationId)
                     .commit()
             emitter.onComplete()
-/*                    .apply {
-                        Log.d(TAG, "finished saving gym id")
-                        emitter.onComplete()
-                    }*/
         }
     }
 }
