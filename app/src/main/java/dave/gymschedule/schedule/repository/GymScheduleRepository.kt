@@ -4,6 +4,7 @@ import android.util.Log
 import dave.gymschedule.settings.model.EventType
 import dave.gymschedule.schedule.model.GymEventViewModel
 import dave.gymschedule.common.model.Resource
+import dave.gymschedule.schedule.model.GymSchedule
 import dave.gymschedule.schedule.service.YmcaService
 import io.reactivex.Observable
 import java.lang.Exception
@@ -41,27 +42,7 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
 
                 try {
                     val gym = ymcaService.getGymSchedule(centreId, startDateTime, endDateTime).execute().body()
-
-                    val gymEventViewModels = mutableListOf<GymEventViewModel>()
-
-                    gym?.events?.forEach { gymEvents ->
-                        gymEvents.events.forEach { gymEvent ->
-                            gymEventViewModels.add(GymEventViewModel(
-                                    gymEvent.name,
-                                    EventType.getEventTypeFromId(gymEvent.eventType),
-                                    gymEvent.details,
-                                    gymEvent.startTime,
-                                    gymEvent.endTime,
-                                    gymEvent.location,
-                                    gymEvent.description,
-                                    gymEvent.fee,
-                                    gymEvent.childMinding,
-                                    gymEvent.ageRange,
-                                    gymEvent.registrationType
-                            ))
-                        }
-                    }
-
+                    val gymEventViewModels = convertGymScheduleToGymEventViewModels(gym)
                     gymEventViewModelsCache["$centreId-$formattedDateString"] = gymEventViewModels
                     emitter.onNext(Resource(Resource.Status.SUCCESS, gymEventViewModels))
                 } catch (exception: Exception) {
@@ -69,6 +50,30 @@ class GymScheduleRepository(private val ymcaService: YmcaService) {
                 }
             }
         }
+    }
+
+    private fun convertGymScheduleToGymEventViewModels(gymSchedule: GymSchedule?): List<GymEventViewModel> {
+        val gymEventViewModels = mutableListOf<GymEventViewModel>()
+
+        gymSchedule?.events?.forEach { gymEvents ->
+            gymEvents.events.forEach { gymEvent ->
+                gymEventViewModels.add(GymEventViewModel(
+                        name = gymEvent.name,
+                        eventType = EventType.getEventTypeFromId(gymEvent.eventType),
+                        details = gymEvent.details,
+                        startTime = gymEvent.startTime,
+                        endTime = gymEvent.endTime,
+                        location = gymEvent.location,
+                        description = gymEvent.description,
+                        fee = gymEvent.fee,
+                        childMinding = gymEvent.childMinding,
+                        ageRange = gymEvent.ageRange,
+                        registration = gymEvent.registrationType
+                ))
+            }
+        }
+
+        return gymEventViewModels
     }
 
     private fun getFormattedDateString(calendar: Calendar): String {

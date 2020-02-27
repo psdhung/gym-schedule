@@ -7,18 +7,27 @@
     android:paddingTop="20dp"
     tools:context=".settings.view.SettingsActivity">
 
-    <TextView
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="@string/settings_gym_location_header" />
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp">
 
-    <Spinner
-        android:id="@+id/gym_location_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/gym_location" />
+        <TextView
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/settings_gym_location_header" />
+
+        <Spinner
+            android:id="@+id/gym_location_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:listitem="@layout/gym_location" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -26,16 +35,24 @@
         android:layout_marginVertical="20dp"
         android:background="@android:color/darker_gray" />
 
-    <TextView
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="@string/settings_event_header" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/event_checkbox_recyclerview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/settings_event_header" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/event_checkbox_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>
