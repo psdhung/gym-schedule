@@ -30,10 +30,6 @@ class GymLocationRepository(private val sharedPreferences: SharedPreferences) {
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
     }
 
-    fun getSavedGymLocationId(): Int {
-        return sharedPreferences.getInt(SAVED_GYM_LOCATION_ID_KEY, NO_SAVED_GYM_LOCATION_ID)
-    }
-
     fun setSavedGymLocationId(locationId: Int): Completable {
         Log.d(TAG, "saving gym location id $locationId")
         return Completable.create { emitter ->

@@ -1,6 +1,8 @@
 package dave.gymschedule
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
@@ -40,7 +42,7 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
                     Log.d(TAG, "got saved gym id: ${savedGymLocation.locationId}")
                     if (savedGymLocation == GymLocation.NONE) {
                         val adapter = GymLocationAdapter(this, GymLocation.getValidLocations())
-                        AlertDialog.Builder(this)
+                        val pickLocationDialog = AlertDialog.Builder(this)
                                 .setAdapter(adapter) { _, selectedPosition ->
                                     val selectedGymLocation = GymLocation.values()[selectedPosition]
 
@@ -54,9 +56,7 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
                                                 AlertDialog.Builder(this)
                                                         .setTitle("ERROR")
                                                         .setMessage("Error while picking location")
-                                                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                                                            finish()
-                                                        }
+                                                        .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
                                                         .create()
                                                         .show()
                                             })
@@ -65,7 +65,12 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
                                 .setCancelable(false)
                                 .setTitle(getString(R.string.gym_location_dialog_title))
                                 .create()
-                                .show()
+
+                        pickLocationDialog.listView.apply {
+                            divider = ColorDrawable(Color.GRAY)
+                            dividerHeight = 1
+                        }
+                        pickLocationDialog.show()
                     } else {
                         startGymScheduleActivity()
                     }

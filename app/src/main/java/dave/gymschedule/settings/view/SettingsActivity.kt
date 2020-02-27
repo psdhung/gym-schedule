@@ -52,16 +52,19 @@ class SettingsActivity : DaggerAppCompatActivity() {
                 disposables.add(gymLocationInteractor.setSavedGymLocation(GymLocation.values()[position])
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribe({
-
-                        }, {
-
-                        })
+                        .subscribe()
                 )
             }
         }
 
-        gym_location_spinner.setSelection(gymLocationInteractor.getSavedGymLocation().ordinal)
+        disposables.add(gymLocationInteractor.savedGymLocationObservable
+                .subscribeOn(io())
+                .observeOn(mainThread())
+                .subscribe({
+                    gym_location_spinner.setSelection(it.ordinal)
+                }, {
+
+                }))
     }
 
     private fun setUpEventFilter() {

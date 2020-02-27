@@ -11,11 +11,8 @@ class GymLocationInteractor(private val gymLocationRepository: GymLocationReposi
         GymLocation.getGymLocationByLocationId(id)
     }
 
-    fun getSavedGymLocation(): GymLocation {
-        return GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId())
-    }
-
     fun setSavedGymLocation(gymLocation: GymLocation): Completable {
         return gymLocationRepository.setSavedGymLocationId(gymLocation.locationId)
     }
+
 }
