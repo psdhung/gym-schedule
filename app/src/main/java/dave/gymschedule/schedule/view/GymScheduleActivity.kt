@@ -7,8 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
-import dave.gymschedule.common.database.GymLocationRepository
-import dave.gymschedule.settings.model.GymLocation
+import dave.gymschedule.settings.GymLocationInteractor
 import dave.gymschedule.settings.view.SettingsActivity
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
@@ -20,12 +19,12 @@ import javax.inject.Inject
 class GymScheduleActivity : DaggerAppCompatActivity() {
 
     companion object {
-        private const val TAG = "GymScheduleActivity"
+        private val TAG = GymScheduleActivity::class.java.simpleName
         private const val MAX_DAYS = 7
     }
 
     @Inject
-    lateinit var gymLocationRepository: GymLocationRepository
+    lateinit var gymLocationInteractor: GymLocationInteractor
 
     private val disposables = CompositeDisposable()
 
@@ -35,11 +34,10 @@ class GymScheduleActivity : DaggerAppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        disposables.add(gymLocationRepository.savedGymLocationIdObservable
+        disposables.add(gymLocationInteractor.savedGymLocationObservable
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribe({
-                    val gymLocation = GymLocation.getGymLocationByLocationId(it)
+                .subscribe({ gymLocation ->
                     val gymLocationName = getString(gymLocation.locationName)
                     supportActionBar?.title = gymLocationName
                 }, {

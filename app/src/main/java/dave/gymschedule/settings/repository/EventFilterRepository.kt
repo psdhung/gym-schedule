@@ -3,7 +3,7 @@ package dave.gymschedule.settings.repository
 import android.util.Log
 import dave.gymschedule.common.database.AppDatabase
 import dave.gymschedule.common.database.EventFilter
-import dave.gymschedule.common.model.EventType
+import dave.gymschedule.settings.model.EventType
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread

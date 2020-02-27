@@ -28,6 +28,9 @@
     <string name="refresh_button_content_description">Refresh gym schedule</string>
 
     <!-- Gym Locations -->
+    <string name="gym_location_name_none">NONE</string>
+    <string name="gym_location_address_none">NOWHERE</string>
+
     <string name="gym_location_name_central">Central YMCA</string>
     <string name="gym_location_address_central">20 Grosvenor Street, Toronto</string>
 

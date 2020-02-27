@@ -3,7 +3,7 @@ package dave.gymschedule.settings.view
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
-import dave.gymschedule.common.model.EventType
+import dave.gymschedule.settings.model.EventType
 
 class EventTypeCheckboxAdapter(private val onCheckChangedListener: (eventType: EventType, isChecked: Boolean) -> Unit) : RecyclerView.Adapter<EventTypeCheckboxAdapter.EventTypeCheckboxViewHolder>() {
 

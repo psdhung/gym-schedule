@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import dagger.android.support.DaggerAppCompatActivity
-import dave.gymschedule.common.database.GymLocationRepository
-import dave.gymschedule.common.database.GymLocationRepository.Companion.NO_SAVED_GYM_LOCATION_ID
 import dave.gymschedule.schedule.view.GymScheduleActivity
+import dave.gymschedule.settings.GymLocationInteractor
 import dave.gymschedule.settings.model.GymLocation
 import dave.gymschedule.settings.view.GymLocationAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
@@ -22,7 +21,7 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
     }
 
     @Inject
-    lateinit var gymLocationRepository: GymLocationRepository
+    lateinit var gymLocationInteractor: GymLocationInteractor
 
     private val disposables = CompositeDisposable()
 
@@ -34,36 +33,34 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        disposables.add(gymLocationRepository.savedGymLocationIdObservable
+        disposables.add(gymLocationInteractor.savedGymLocationObservable
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribe({ savedGymLocationId ->
-                    Log.d(TAG, "got saved gym id: $savedGymLocationId")
-                    if (savedGymLocationId == NO_SAVED_GYM_LOCATION_ID) {
-                        val adapter = GymLocationAdapter(this, GymLocation.values().asList())
+                .subscribe({ savedGymLocation ->
+                    Log.d(TAG, "got saved gym id: ${savedGymLocation.locationId}")
+                    if (savedGymLocation == GymLocation.NONE) {
+                        val adapter = GymLocationAdapter(this, GymLocation.getValidLocations())
                         AlertDialog.Builder(this)
                                 .setAdapter(adapter) { _, selectedPosition ->
-                                    val selectedGymLocationId = GymLocation.values()[selectedPosition].locationId
+                                    val selectedGymLocation = GymLocation.values()[selectedPosition]
 
-                                    Log.d(TAG, "selected location index: $selectedPosition, locationId: $selectedGymLocationId")
-                                    if (selectedGymLocationId != -1) {
-                                        disposables.add(gymLocationRepository.setSavedGymLocationId(selectedGymLocationId)
-                                                .subscribeOn(io())
-                                                .observeOn(mainThread())
-                                                .subscribe({
-                                                    startGymScheduleActivity()
-                                                }, {
-                                                    AlertDialog.Builder(this)
-                                                            .setTitle("ERROR")
-                                                            .setMessage("Error while picking location")
-                                                            .setPositiveButton(android.R.string.ok) { _, _ ->
-                                                                finish()
-                                                            }
-                                                            .create()
-                                                            .show()
-                                                })
-                                        )
-                                    }
+                                    Log.d(TAG, "selected location index: $selectedPosition, locationId: $selectedGymLocation")
+                                    disposables.add(gymLocationInteractor.setSavedGymLocation(selectedGymLocation)
+                                            .subscribeOn(io())
+                                            .observeOn(mainThread())
+                                            .subscribe({
+                                                startGymScheduleActivity()
+                                            }, {
+                                                AlertDialog.Builder(this)
+                                                        .setTitle("ERROR")
+                                                        .setMessage("Error while picking location")
+                                                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                                                            finish()
+                                                        }
+                                                        .create()
+                                                        .show()
+                                            })
+                                    )
                                 }
                                 .setCancelable(false)
                                 .setTitle(getString(R.string.gym_location_dialog_title))

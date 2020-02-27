@@ -22,7 +22,7 @@ import javax.inject.Inject
 class GymScheduleFragment : DaggerFragment() {
 
     companion object {
-        private const val TAG = "GymScheduleFragment"
+        private val TAG = GymScheduleFragment::class.java.simpleName
         const val SCHEDULE_DATE_KEY = "schedule_date"
     }
 
@@ -60,8 +60,8 @@ class GymScheduleFragment : DaggerFragment() {
         disposables.add(presenter.getGymEventsForDate(date)
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribe({ visibleEventsResource ->
-                    when (visibleEventsResource.status) {
+                .subscribe({ gymViewModel ->
+                    when (gymViewModel.status) {
                         Resource.Status.LOADING -> {
                             hideGymEvents()
                             hideErrorMessage()
@@ -70,11 +70,11 @@ class GymScheduleFragment : DaggerFragment() {
                         Resource.Status.ERROR -> {
                             hideGymEvents()
                             hideLoadingIndicator()
-                            showErrorMessage(getString(R.string.error_schedule_retrieval_failed), visibleEventsResource.error)
+                            showErrorMessage(getString(R.string.error_schedule_retrieval_failed), gymViewModel.error)
                         }
                         else -> {
                             Log.d(TAG, "got events for date ${date.time}, revealing page")
-                            val visibleEvents = visibleEventsResource.data
+                            val visibleEvents = gymViewModel.data.events
                             if (visibleEvents.isEmpty()) {
                                 hideLoadingIndicator()
                                 hideGymEvents()

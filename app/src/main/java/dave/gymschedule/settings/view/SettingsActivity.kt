@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.R
-import dave.gymschedule.common.database.GymLocationRepository
-import dave.gymschedule.common.model.EventType
+import dave.gymschedule.settings.GymLocationInteractor
+import dave.gymschedule.settings.model.EventType
 import dave.gymschedule.settings.model.GymLocation
 import dave.gymschedule.settings.presenter.SettingsPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
@@ -25,10 +25,10 @@ class SettingsActivity : DaggerAppCompatActivity() {
     }
 
     @Inject
-    lateinit var presenter: SettingsPresenter
+    lateinit var settingsPresenter: SettingsPresenter
 
     @Inject
-    lateinit var gymLocationRepository: GymLocationRepository
+    lateinit var gymLocationInteractor: GymLocationInteractor
 
     private val disposables = CompositeDisposable()
 
@@ -39,17 +39,17 @@ class SettingsActivity : DaggerAppCompatActivity() {
         supportActionBar?.title = getString(R.string.settings_activity_title)
 
         setUpGymLocationSelection()
-        setUpEventTypeFilter()
+        setUpEventFilter()
     }
 
     private fun setUpGymLocationSelection() {
-        val gymLocationAdapter = GymLocationAdapter(this, GymLocation.values().asList())
+        val gymLocationAdapter = GymLocationAdapter(this, GymLocation.getValidLocations())
         gym_location_spinner.adapter = gymLocationAdapter
         gym_location_spinner.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                disposables.add(gymLocationRepository.setSavedGymLocationId(GymLocation.values()[position].locationId)
+                disposables.add(gymLocationInteractor.setSavedGymLocation(GymLocation.values()[position])
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribe({
@@ -61,14 +61,14 @@ class SettingsActivity : DaggerAppCompatActivity() {
             }
         }
 
-        gym_location_spinner.setSelection(GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId()).ordinal)
+        gym_location_spinner.setSelection(gymLocationInteractor.getSavedGymLocation().ordinal)
     }
 
-    private fun setUpEventTypeFilter() {
+    private fun setUpEventFilter() {
         event_checkbox_recyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         val adapter = EventTypeCheckboxAdapter { eventType, isChecked ->
-            Log.d("SettingsAdapter", "changing $eventType to $isChecked")
-            disposables.add(presenter.onEventTypeToggled(eventType, isChecked)
+            Log.d(TAG, "changing $eventType to $isChecked")
+            disposables.add(settingsPresenter.onEventTypeToggled(eventType, isChecked)
                     .subscribeOn(io())
                     .observeOn(io())
                     .subscribe({
@@ -79,7 +79,7 @@ class SettingsActivity : DaggerAppCompatActivity() {
             )
         }
         event_checkbox_recyclerview.adapter = adapter
-        disposables.add(presenter.getEventTypesMapObservable()
+        disposables.add(settingsPresenter.getEventTypesMapObservable()
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribe({ eventTypesMap ->
@@ -97,7 +97,8 @@ class SettingsActivity : DaggerAppCompatActivity() {
                     adapter.setData(eventTypes)
                 }, {
                     Log.d(TAG, "failed to get event type states from repository", it)
-                }))
+                })
+        )
     }
 
 }

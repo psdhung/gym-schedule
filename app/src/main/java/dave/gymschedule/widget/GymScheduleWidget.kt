@@ -8,10 +8,8 @@ import android.util.Log
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import dave.gymschedule.R
-import dave.gymschedule.common.database.GymLocationRepository
 import dave.gymschedule.common.model.Resource
 import dave.gymschedule.schedule.presenter.GymSchedulePresenter
-import dave.gymschedule.settings.model.GymLocation
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers.io
@@ -21,14 +19,11 @@ import javax.inject.Inject
 class GymScheduleWidget : AppWidgetProvider() {
 
     companion object {
-        private const val TAG = "GymScheduleWidget"
+        private val TAG = GymScheduleWidget::class.java.simpleName
     }
 
     @Inject
     lateinit var gymSchedulePresenter: GymSchedulePresenter
-
-    @Inject
-    lateinit var gymLocationRepository: GymLocationRepository
 
     private val disposables = CompositeDisposable()
 
@@ -38,43 +33,29 @@ class GymScheduleWidget : AppWidgetProvider() {
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
-    override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    override fun onDisabled(context: Context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
-
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         val views = RemoteViews(context.packageName, R.layout.gym_schedule_widget)
-        val gymLocation = GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId())
-        val gymLocationName = context.getString(gymLocation.locationName)
-
-        views.setTextViewText(R.id.widget_gym_location, gymLocationName)
 
         disposables.add(gymSchedulePresenter.getGymEventsForDate(Calendar.getInstance())
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribe({ visibleEventsResource ->
-                    Log.d(TAG, "status: ${visibleEventsResource.status}")
-                    when (visibleEventsResource.status) {
-                        Resource.Status.LOADING -> {
-
-                        }
+                .subscribe({ gymViewModelResource ->
+                    Log.d(TAG, "status: ${gymViewModelResource.status}")
+                    views.setTextViewText(R.id.widget_gym_location, gymViewModelResource.data.location.name)
+                    when (gymViewModelResource.status) {
+                        Resource.Status.LOADING -> {}
                         Resource.Status.ERROR -> {
-//                            showErrorMessage(context.getString(R.string.error_schedule_retrieval_failed), visibleEventsResource.error)
+                            showErrorMessage()
                         }
                         else -> {
-                            val visibleEvents = visibleEventsResource.data
-                            if (visibleEvents.isEmpty()) {
-//                                showErrorMessage(context.getString(R.string.error_no_events))
+                            val gymEvents = gymViewModelResource.data.events
+                            if (gymEvents.isEmpty()) {
+                                showErrorMessage()
                             } else {
                                 Log.d(TAG, "successfully got schedule")
 
@@ -83,9 +64,13 @@ class GymScheduleWidget : AppWidgetProvider() {
                     }
                 }, { error ->
                     Log.d(TAG, "failed to retrieve schedule", error)
-//                    showErrorMessage(context.getString(R.string.error_schedule_retrieval_failed), error)
+                    showErrorMessage()
                 }))
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+
+    private fun showErrorMessage() {
+
     }
 }

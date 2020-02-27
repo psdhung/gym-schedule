@@ -1,7 +1,7 @@
 package dave.gymschedule.schedule.repository
 
 import android.util.Log
-import dave.gymschedule.common.model.EventType
+import dave.gymschedule.settings.model.EventType
 import dave.gymschedule.schedule.model.GymEventViewModel
 import dave.gymschedule.common.model.Resource
 import dave.gymschedule.schedule.service.YmcaService

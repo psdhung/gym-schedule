@@ -12,11 +12,16 @@ enum class GymLocation(val locationId: Int, @StringRes val locationName: Int, @S
     SCARBOROUGH(294, R.string.gym_location_name_scarborough, R.string.gym_location_address_scarborough),
     NORTH_YORK(296, R.string.gym_location_name_north_york, R.string.gym_location_address_north_york),
     WEST_END(303, R.string.gym_location_name_west_end, R.string.gym_location_address_west_end),
-    DOWNTOWN(375, R.string.gym_location_name_downtown, R.string.gym_location_address_downtown);
+    DOWNTOWN(375, R.string.gym_location_name_downtown, R.string.gym_location_address_downtown),
+    NONE(-1, R.string.gym_location_name_none, R.string.gym_location_address_none);
 
     companion object {
         fun getGymLocationByLocationId(locationId: Int): GymLocation {
-            return values().first { it.locationId == locationId }
+            return values().firstOrNull { it.locationId == locationId } ?: NONE
+        }
+
+        fun getValidLocations(): List<GymLocation> {
+            return values().filterNot { it == NONE }
         }
     }
 }

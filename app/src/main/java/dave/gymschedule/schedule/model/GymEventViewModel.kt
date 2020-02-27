@@ -1,6 +1,6 @@
 package dave.gymschedule.schedule.model
 
-import dave.gymschedule.common.model.EventType
+import dave.gymschedule.settings.model.EventType
 
 data class GymEventViewModel(
         val name: String,

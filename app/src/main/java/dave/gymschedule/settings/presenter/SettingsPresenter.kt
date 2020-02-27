@@ -1,6 +1,6 @@
 package dave.gymschedule.settings.presenter
 
-import dave.gymschedule.common.model.EventType
+import dave.gymschedule.settings.model.EventType
 import dave.gymschedule.settings.repository.EventFilterRepository
 import io.reactivex.Completable
 import io.reactivex.Observable

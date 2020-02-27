@@ -7,13 +7,14 @@ import dagger.Module
 import dagger.Provides
 import dave.gymschedule.R
 import dave.gymschedule.common.database.AppDatabase
-import dave.gymschedule.common.database.GymLocationRepository
 import dave.gymschedule.schedule.interactor.GymScheduleInteractor
 import dave.gymschedule.schedule.presenter.GymSchedulePresenter
-import dave.gymschedule.settings.presenter.SettingsPresenter
-import dave.gymschedule.settings.repository.EventFilterRepository
 import dave.gymschedule.schedule.repository.GymScheduleRepository
 import dave.gymschedule.schedule.service.YmcaService
+import dave.gymschedule.settings.GymLocationInteractor
+import dave.gymschedule.settings.presenter.SettingsPresenter
+import dave.gymschedule.settings.repository.EventFilterRepository
+import dave.gymschedule.settings.repository.GymLocationRepository
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -44,7 +45,6 @@ class AppModule {
                 .client(client)
                 .baseUrl("https://api.ymcagta.org/")
                 .addConverterFactory(GsonConverterFactory.create())
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 
@@ -66,17 +66,16 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesGymSchedulePresenter(scheduleInteractor: GymScheduleInteractor): GymSchedulePresenter {
-        return GymSchedulePresenter(scheduleInteractor)
+    fun providesGymSchedulePresenter(scheduleInteractor: GymScheduleInteractor, gymLocationInteractor: GymLocationInteractor): GymSchedulePresenter {
+        return GymSchedulePresenter(scheduleInteractor, gymLocationInteractor)
     }
 
     @Provides
     @Singleton
     fun providesGymScheduleInteractor(
             gymScheduleRepository: GymScheduleRepository,
-            eventFilterRepository: EventFilterRepository,
-            gymLocationRepository: GymLocationRepository): GymScheduleInteractor {
-        return GymScheduleInteractor(gymScheduleRepository, eventFilterRepository, gymLocationRepository)
+            eventFilterRepository: EventFilterRepository): GymScheduleInteractor {
+        return GymScheduleInteractor(gymScheduleRepository, eventFilterRepository)
     }
 
     @Provides
@@ -95,6 +94,12 @@ class AppModule {
     @Singleton
     fun providesSettingsPresenter(eventFilterRepository: EventFilterRepository): SettingsPresenter {
         return SettingsPresenter(eventFilterRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesGymLocationInteractor(gymLocationRepository: GymLocationRepository): GymLocationInteractor {
+        return GymLocationInteractor(gymLocationRepository)
     }
 
     @Provides

@@ -1,8 +1,8 @@
 package dave.gymschedule.interactor
 
 import dave.gymschedule.Rx2SchedulersOverrideRule
-import dave.gymschedule.common.database.GymLocationRepository
-import dave.gymschedule.common.model.EventType
+import dave.gymschedule.settings.repository.GymLocationRepository
+import dave.gymschedule.settings.model.EventType
 import dave.gymschedule.schedule.model.GymEventViewModel
 import dave.gymschedule.common.model.Resource
 import dave.gymschedule.settings.repository.EventFilterRepository

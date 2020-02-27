@@ -1,4 +1,4 @@
-package dave.gymschedule.common.database
+package dave.gymschedule.settings.repository
 
 import android.content.SharedPreferences
 import android.util.Log
@@ -6,6 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 class GymLocationRepository(private val sharedPreferences: SharedPreferences) {
+
     companion object {
         private val TAG = GymLocationRepository::class.java.simpleName
 
