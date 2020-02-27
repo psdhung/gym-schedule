@@ -3,7 +3,7 @@ package dave.gymschedule.schedule.interactor
 import dave.gymschedule.common.database.GymLocationRepository
 import dave.gymschedule.schedule.model.GymEventViewModel
 import dave.gymschedule.common.model.Resource
-import dave.gymschedule.settings.repository.EventTypeStateRepository
+import dave.gymschedule.settings.repository.EventFilterRepository
 import dave.gymschedule.schedule.repository.GymScheduleRepository
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers.io
 import java.util.Calendar
 
 class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleRepository,
-                            private val eventTypeStateRepository: EventTypeStateRepository,
+                            private val eventFilterRepository: EventFilterRepository,
                             private val gymLocationRepository: GymLocationRepository) {
 
     fun getGymEventViewModelsObservable(date: Calendar): Observable<Resource<List<GymEventViewModel>>> {
@@ -21,7 +21,7 @@ class GymScheduleInteractor(private val gymScheduleRepository: GymScheduleReposi
                         .flatMap { savedGymLocationId ->
                             gymScheduleRepository.getGymEventsViewModelObservable(savedGymLocationId, date)
                         },
-                eventTypeStateRepository.eventTypeStateObservable,
+                eventFilterRepository.eventFilterObservable,
                 BiFunction { gymEventViewModelsResource, eventTypeMap ->
                     if (gymEventViewModelsResource.status == Resource.Status.LOADING) {
                         Resource(Resource.Status.LOADING, listOf())

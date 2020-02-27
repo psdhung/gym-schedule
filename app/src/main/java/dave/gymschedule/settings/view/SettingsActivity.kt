@@ -38,6 +38,33 @@ class SettingsActivity : DaggerAppCompatActivity() {
 
         supportActionBar?.title = getString(R.string.settings_activity_title)
 
+        setUpGymLocationSelection()
+        setUpEventTypeFilter()
+    }
+
+    private fun setUpGymLocationSelection() {
+        val gymLocationAdapter = GymLocationAdapter(this, GymLocation.values().asList())
+        gym_location_spinner.adapter = gymLocationAdapter
+        gym_location_spinner.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                disposables.add(gymLocationRepository.setSavedGymLocationId(GymLocation.values()[position].locationId)
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribe({
+
+                        }, {
+
+                        })
+                )
+            }
+        }
+
+        gym_location_spinner.setSelection(GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId()).ordinal)
+    }
+
+    private fun setUpEventTypeFilter() {
         event_checkbox_recyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         val adapter = EventTypeCheckboxAdapter { eventType, isChecked ->
             Log.d("SettingsAdapter", "changing $eventType to $isChecked")
@@ -71,26 +98,6 @@ class SettingsActivity : DaggerAppCompatActivity() {
                 }, {
                     Log.d(TAG, "failed to get event type states from repository", it)
                 }))
-
-        val gymLocationAdapter = GymLocationAdapter(this, GymLocation.values().asList())
-        gym_location_spinner.adapter = gymLocationAdapter
-        gym_location_spinner.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                disposables.add(gymLocationRepository.setSavedGymLocationId(gymLocationAdapter.getLocationId(position))
-                        .subscribeOn(io())
-                        .observeOn(mainThread())
-                        .subscribe({
-
-                        }, {
-
-                        })
-                )
-            }
-        }
-
-        gym_location_spinner.setSelection(GymLocation.getGymLocationByLocationId(gymLocationRepository.getSavedGymLocationId()).ordinal)
     }
 
 }

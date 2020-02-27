@@ -3,7 +3,7 @@ package dave.gymschedule.common.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
-@Database(entities = [EventTypeState::class], version = 1)
+@Database(entities = [EventFilter::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun eventTypeStateDao(): EventTypeStateDao
+    abstract fun eventTypeFilterDao(): EventFilterDao
 }

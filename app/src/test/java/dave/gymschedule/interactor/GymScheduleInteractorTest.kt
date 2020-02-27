@@ -5,7 +5,7 @@ import dave.gymschedule.common.database.GymLocationRepository
 import dave.gymschedule.common.model.EventType
 import dave.gymschedule.schedule.model.GymEventViewModel
 import dave.gymschedule.common.model.Resource
-import dave.gymschedule.settings.repository.EventTypeStateRepository
+import dave.gymschedule.settings.repository.EventFilterRepository
 import dave.gymschedule.schedule.repository.GymScheduleRepository
 import dave.gymschedule.schedule.interactor.GymScheduleInteractor
 import io.reactivex.Observable
@@ -29,7 +29,7 @@ class GymScheduleInteractorTest {
     lateinit var mockGymScheduleRepository: GymScheduleRepository
 
     @Mock
-    lateinit var mockEventTypeStateRepository: EventTypeStateRepository
+    lateinit var mockEventFilterRepository: EventFilterRepository
 
     @Mock
     lateinit var mockGymLocationRepository: GymLocationRepository
@@ -39,7 +39,7 @@ class GymScheduleInteractorTest {
     @Before
     fun setUp() {
         `when`(mockGymLocationRepository.savedGymLocationIdObservable).thenReturn(Observable.just(1))
-        interactor = GymScheduleInteractor(mockGymScheduleRepository, mockEventTypeStateRepository, mockGymLocationRepository)
+        interactor = GymScheduleInteractor(mockGymScheduleRepository, mockEventFilterRepository, mockGymLocationRepository)
     }
 
     @Test
@@ -51,7 +51,7 @@ class GymScheduleInteractorTest {
         )
 
         `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(1, date)).thenReturn(Observable.just(Resource(Resource.Status.SUCCESS, gymEventViewModels)))
-        `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(Observable.just(mapOf()))
+        `when`(mockEventFilterRepository.eventFilterObservable).thenReturn(Observable.just(mapOf()))
 
         // Act
         val list = interactor.getGymEventViewModelsObservable(date)
@@ -75,7 +75,7 @@ class GymScheduleInteractorTest {
         `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(1, date)).thenReturn(
                 Observable.just(Resource(Resource.Status.SUCCESS, gymEventViewModels))
         )
-        `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
+        `when`(mockEventFilterRepository.eventFilterObservable).thenReturn(
                 Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to true))
         )
 
@@ -101,7 +101,7 @@ class GymScheduleInteractorTest {
         `when`(mockGymScheduleRepository.getGymEventsViewModelObservable(1, date)).thenReturn(
                 Observable.just(Resource(Resource.Status.SUCCESS, gymEventViewModels))
         )
-        `when`(mockEventTypeStateRepository.eventTypeStateObservable).thenReturn(
+        `when`(mockEventFilterRepository.eventFilterObservable).thenReturn(
                 Observable.just(mapOf(EventType.SPORTS_AND_RECREATION.eventTypeId to false))
         )
 

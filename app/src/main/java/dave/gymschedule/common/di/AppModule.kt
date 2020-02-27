@@ -11,7 +11,7 @@ import dave.gymschedule.common.database.GymLocationRepository
 import dave.gymschedule.schedule.interactor.GymScheduleInteractor
 import dave.gymschedule.schedule.presenter.GymSchedulePresenter
 import dave.gymschedule.settings.presenter.SettingsPresenter
-import dave.gymschedule.settings.repository.EventTypeStateRepository
+import dave.gymschedule.settings.repository.EventFilterRepository
 import dave.gymschedule.schedule.repository.GymScheduleRepository
 import dave.gymschedule.schedule.service.YmcaService
 import okhttp3.Cache
@@ -74,15 +74,15 @@ class AppModule {
     @Singleton
     fun providesGymScheduleInteractor(
             gymScheduleRepository: GymScheduleRepository,
-            eventTypeStateRepository: EventTypeStateRepository,
+            eventFilterRepository: EventFilterRepository,
             gymLocationRepository: GymLocationRepository): GymScheduleInteractor {
-        return GymScheduleInteractor(gymScheduleRepository, eventTypeStateRepository, gymLocationRepository)
+        return GymScheduleInteractor(gymScheduleRepository, eventFilterRepository, gymLocationRepository)
     }
 
     @Provides
     @Singleton
-    fun providesEventTypeStateInteractor(appDatabase: AppDatabase): EventTypeStateRepository {
-        return EventTypeStateRepository(appDatabase)
+    fun providesEventFilterRepository(appDatabase: AppDatabase): EventFilterRepository {
+        return EventFilterRepository(appDatabase)
     }
 
     @Provides
@@ -93,8 +93,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesSettingsPresenter(eventTypeStateRepository: EventTypeStateRepository): SettingsPresenter {
-        return SettingsPresenter(eventTypeStateRepository)
+    fun providesSettingsPresenter(eventFilterRepository: EventFilterRepository): SettingsPresenter {
+        return SettingsPresenter(eventFilterRepository)
     }
 
     @Provides

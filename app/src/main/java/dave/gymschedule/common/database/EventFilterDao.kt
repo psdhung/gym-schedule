@@ -8,12 +8,12 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 @Dao
-interface EventTypeStateDao {
+interface EventFilterDao {
 
-    @Query("SELECT * FROM EventTypeState")
-    fun getAllEventTypeStates(): Observable<List<EventTypeState>>
+    @Query("SELECT * FROM EventFilter")
+    fun getAllEventFilters(): Observable<List<EventFilter>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun updateEventTypeState(eventTypeState: EventTypeState): Completable
+    fun updateEventFilter(eventFilter: EventFilter): Completable
 
 }

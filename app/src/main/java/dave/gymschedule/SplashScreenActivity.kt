@@ -7,8 +7,8 @@ import androidx.appcompat.app.AlertDialog
 import dagger.android.support.DaggerAppCompatActivity
 import dave.gymschedule.common.database.GymLocationRepository
 import dave.gymschedule.common.database.GymLocationRepository.Companion.NO_SAVED_GYM_LOCATION_ID
-import dave.gymschedule.settings.model.GymLocation
 import dave.gymschedule.schedule.view.GymScheduleActivity
+import dave.gymschedule.settings.model.GymLocation
 import dave.gymschedule.settings.view.GymLocationAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
@@ -43,7 +43,7 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
                         val adapter = GymLocationAdapter(this, GymLocation.values().asList())
                         AlertDialog.Builder(this)
                                 .setAdapter(adapter) { _, selectedPosition ->
-                                    val selectedGymLocationId = adapter.getLocationId(selectedPosition)
+                                    val selectedGymLocationId = GymLocation.values()[selectedPosition].locationId
 
                                     Log.d(TAG, "selected location index: $selectedPosition, locationId: $selectedGymLocationId")
                                     if (selectedGymLocationId != -1) {
@@ -52,7 +52,7 @@ class SplashScreenActivity : DaggerAppCompatActivity() {
                                                 .observeOn(mainThread())
                                                 .subscribe({
                                                     startGymScheduleActivity()
-                                                }, { error ->
+                                                }, {
                                                     AlertDialog.Builder(this)
                                                             .setTitle("ERROR")
                                                             .setMessage("Error while picking location")

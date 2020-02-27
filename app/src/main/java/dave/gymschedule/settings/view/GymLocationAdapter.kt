@@ -10,6 +10,7 @@ import dave.gymschedule.R
 import dave.gymschedule.settings.model.GymLocation
 
 class GymLocationAdapter(private val context: Context, private val gymLocations: List<GymLocation>) : BaseAdapter() {
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var localConvertView = convertView
         if (localConvertView == null) {
@@ -34,10 +35,6 @@ class GymLocationAdapter(private val context: Context, private val gymLocations:
 
     override fun getCount(): Int {
         return gymLocations.size
-    }
-
-    fun getLocationId(position: Int): Int {
-        return gymLocations[position].locationId
     }
 
 }

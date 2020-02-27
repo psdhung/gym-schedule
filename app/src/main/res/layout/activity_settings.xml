@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:paddingTop="20dp"
     tools:context=".settings.view.SettingsActivity">
 
     <TextView
@@ -19,6 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:listitem="@layout/gym_location" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="20dp"
+        android:background="@android:color/darker_gray" />
 
     <TextView
         style="@style/TextAppearance.AppCompat.Headline"
