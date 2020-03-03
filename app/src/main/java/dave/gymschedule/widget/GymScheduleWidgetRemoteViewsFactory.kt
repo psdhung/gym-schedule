@@ -34,6 +34,7 @@ class GymScheduleWidgetRemoteViewsFactory(private val context: Context,
             if (details.isNullOrBlank()) {
                 setViewVisibility(R.id.event_details, View.GONE)
             } else {
+                setViewVisibility(R.id.event_details, View.VISIBLE)
                 setTextViewText(R.id.event_details, details)
             }
             setTextViewText(R.id.event_location, event?.location)

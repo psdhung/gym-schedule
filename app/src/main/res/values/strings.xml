@@ -2,6 +2,7 @@
     <!-- App-wide -->
     <string name="app_shared_preferences_file_key">gym-schedule-app-shared-preferences-key</string>
     <string name="app_name">Gym Schedule</string>
+    <string name="schedule_date_format">EEEE MMM dd</string>
 
     <!-- Main Gym Schedule -->
     <string name="schedule_loading_text">Loading…</string>
@@ -25,7 +26,10 @@
     <string name="settings_event_header">Events</string>
 
     <!-- Widget -->
-    <string name="refresh_button_content_description">Refresh gym schedule</string>
+    <string name="widget_refresh_button_content_description">Refresh gym schedule</string>
+    <string name="widget_schedule_date_string_format">Date: %1$s</string>
+    <string name="widget_schedule_updated_date_format">hh:mm:ss a EEEE MMM dd</string>
+    <string name="widget_schedule_updated_date_string_format">Updated: %1$s</string>
 
     <!-- Gym Locations -->
     <string name="gym_location_name_none">NONE</string>

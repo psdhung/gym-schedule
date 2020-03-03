@@ -35,7 +35,7 @@
             android:name=".settings.view.SettingsActivity"
             android:parentActivityName=".schedule.view.GymScheduleActivity" />
 
-        <receiver android:name=".widget.GymScheduleWidget">
+        <receiver android:name=".widget.GymScheduleWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

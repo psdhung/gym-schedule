@@ -14,12 +14,15 @@ import dave.gymschedule.settings.GymLocationInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers.io
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
-class GymScheduleWidget : AppWidgetProvider() {
+class GymScheduleWidgetProvider : AppWidgetProvider() {
 
     companion object {
-        private val TAG = GymScheduleWidget::class.java.simpleName
+        private val TAG = GymScheduleWidgetProvider::class.java.simpleName
     }
 
     @Inject
@@ -63,20 +66,33 @@ class GymScheduleWidget : AppWidgetProvider() {
         }
 
         setUpRefreshButton(remoteViews, context, appWidgetId)
-        updateGymName(remoteViews, context, appWidgetManager, appWidgetId)
-
-//        appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+        updateWidgetHeader(remoteViews, context, appWidgetManager, appWidgetId)
     }
 
-    private fun updateGymName(remoteViews: RemoteViews, context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+    private fun updateWidgetHeader(remoteViews: RemoteViews, context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         disposables.add(gymLocationInteractor.savedGymLocationObservable
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribe {
+                    Log.d(TAG, "got gym location: $it")
+
                     val locationName = context.getString(it.locationName)
-                    Log.d(TAG, "got gym location: $it, name=$locationName")
                     remoteViews.setTextViewText(R.id.widget_gym_location, locationName)
+
+                    val currentDay = Date()
+                    val scheduleDateFormat = SimpleDateFormat(context.getString(R.string.schedule_date_format), Locale.getDefault())
+                    val scheduleDate = scheduleDateFormat.format(currentDay)
+                    val scheduleDateString = context.getString(R.string.widget_schedule_date_string_format, scheduleDate)
+                    remoteViews.setTextViewText(R.id.widget_schedule_date, scheduleDateString)
+
+                    val scheduleUpdatedDateFormat = SimpleDateFormat(context.getString(R.string.widget_schedule_updated_date_format), Locale.getDefault())
+                    val scheduleUpdatedDate = scheduleUpdatedDateFormat.format(currentDay)
+                    val scheduleUpdatedDateString = context.getString(R.string.widget_schedule_updated_date_string_format, scheduleUpdatedDate)
+                    remoteViews.setTextViewText(R.id.widget_schedule_last_updated, scheduleUpdatedDateString)
+
                     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+
+                    // Refresh the gym schedule
                     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_gym_schedule_list)
                 })
     }

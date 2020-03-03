@@ -9,11 +9,12 @@ import java.util.Calendar
 import java.util.Locale
 
 class SchedulePagerAdapter(fragmentManager: FragmentManager,
+                           dateFormat: String,
                            private val currentDay: Calendar,
-                           private val numDays: Int) : FragmentPagerAdapter(fragmentManager) {
+                           private val numDays: Int) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    companion object {
-        private val DISPLAYED_DATE_FORMAT get() = SimpleDateFormat("EE MMM dd, yyyy", Locale.getDefault())
+    private val scheduleDateFormat by lazy {
+        SimpleDateFormat(dateFormat, Locale.getDefault())
     }
 
     override fun getItem(position: Int): Fragment {
@@ -29,7 +30,7 @@ class SchedulePagerAdapter(fragmentManager: FragmentManager,
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return DISPLAYED_DATE_FORMAT.format(getDateForFragment(position))
+        return scheduleDateFormat.format(getDateForFragment(position))
     }
 
     private fun getDateForFragment(position: Int): Long {
@@ -37,5 +38,4 @@ class SchedulePagerAdapter(fragmentManager: FragmentManager,
         current.add(Calendar.DAY_OF_YEAR, position)
         return current.timeInMillis
     }
-
 }

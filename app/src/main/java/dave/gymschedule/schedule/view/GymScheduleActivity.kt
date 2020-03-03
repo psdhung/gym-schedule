@@ -45,7 +45,7 @@ class GymScheduleActivity : DaggerAppCompatActivity() {
                     supportActionBar?.setTitle(R.string.error_gym_name_retrieval_failed)
                 }))
 
-        schedule_pager.adapter = SchedulePagerAdapter(supportFragmentManager, Calendar.getInstance(), MAX_DAYS)
+        schedule_pager.adapter = SchedulePagerAdapter(supportFragmentManager, getString(R.string.schedule_date_format), Calendar.getInstance(), MAX_DAYS)
         schedule_tab_layout.setupWithViewPager(schedule_pager)
     }
 
