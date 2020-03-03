@@ -7,6 +7,7 @@ import dave.gymschedule.schedule.view.GymScheduleActivity
 import dave.gymschedule.schedule.view.GymScheduleFragment
 import dave.gymschedule.SplashScreenActivity
 import dave.gymschedule.widget.GymScheduleWidget
+import dave.gymschedule.widget.GymScheduleWidgetService
 
 @Module
 abstract class BuildersModule {
@@ -25,5 +26,8 @@ abstract class BuildersModule {
 
     @ContributesAndroidInjector
     abstract fun bindGymScheduleWidget(): GymScheduleWidget
+
+    @ContributesAndroidInjector
+    abstract fun bindGymScheduleWidgetService(): GymScheduleWidgetService
 
 }

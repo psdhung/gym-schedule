@@ -26,13 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".schedule.view.GymScheduleActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".settings.view.SettingsActivity"
             android:parentActivityName=".schedule.view.GymScheduleActivity" />
@@ -46,6 +44,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/gym_schedule_widget_info" />
         </receiver>
+
+        <service
+            android:name=".widget.GymScheduleWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

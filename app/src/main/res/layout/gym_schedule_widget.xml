@@ -18,11 +18,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textStyle="bold"
+            android:text="@string/schedule_loading_text"
             tools:text="Markham Ruddy Bratty Road" />
 
         <ImageButton
+            android:id="@+id/widget_refresh_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:background="@android:color/transparent"
@@ -37,9 +39,26 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray" />
 
-    <ListView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/gym_event_summary" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
+        <ListView
+            android:id="@+id/widget_gym_schedule_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/gym_event_summary" />
+
+        <TextView
+            android:id="@+id/widget_loading_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/schedule_loading_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>

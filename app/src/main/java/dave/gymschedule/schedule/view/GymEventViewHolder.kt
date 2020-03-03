@@ -30,7 +30,7 @@ class GymEventViewHolder(val view: MaterialCardView) : RecyclerView.ViewHolder(v
 
     fun setEventDetails(eventDetails: String?) {
         val eventDetailsTextView = view.findViewById<TextView>(R.id.event_details)
-        if (eventDetails?.isEmpty() == true || eventDetails?.isBlank() == true) {
+        if (eventDetails.isNullOrBlank()) {
             eventDetailsTextView.visibility = View.GONE
         } else {
             eventDetailsTextView.text = eventDetails
