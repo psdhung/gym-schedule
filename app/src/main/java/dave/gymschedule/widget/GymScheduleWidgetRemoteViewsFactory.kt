@@ -52,9 +52,9 @@ class GymScheduleWidgetRemoteViewsFactory(private val context: Context,
         Log.d(TAG, "onDataSetChanged")
         val gymViewModelResource = gymSchedulePresenter.getGymEventsForDate(Calendar.getInstance())
                 .filter { it.status == Resource.Status.SUCCESS }
-                .blockingFirst()
+                .blockingLast()
         Log.d(TAG, "successfully got schedule for location ${gymViewModelResource.data.location}")
-        this.gymViewModel = gymViewModelResource.data
+        gymViewModel = gymViewModelResource.data
     }
 
     override fun getCount(): Int = gymViewModel?.events?.size ?: 0

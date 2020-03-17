@@ -66,10 +66,10 @@ class GymScheduleWidgetProvider : AppWidgetProvider() {
         }
 
         setUpRefreshButton(remoteViews, context, appWidgetId)
-        updateWidgetHeader(remoteViews, context, appWidgetManager, appWidgetId)
+        updateSchedule(remoteViews, context, appWidgetManager, appWidgetId)
     }
 
-    private fun updateWidgetHeader(remoteViews: RemoteViews, context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+    private fun updateSchedule(remoteViews: RemoteViews, context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         disposables.add(gymLocationInteractor.savedGymLocationObservable
                 .subscribeOn(io())
                 .observeOn(mainThread())

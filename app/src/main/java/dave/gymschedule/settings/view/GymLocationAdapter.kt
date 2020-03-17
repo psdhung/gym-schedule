@@ -12,17 +12,13 @@ import dave.gymschedule.settings.model.GymLocation
 class GymLocationAdapter(private val context: Context, private val gymLocations: List<GymLocation>) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var localConvertView = convertView
-        if (localConvertView == null) {
-            localConvertView = LayoutInflater.from(context).inflate(R.layout.gym_location, parent, false)
-        }
-
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.gym_location, parent, false)
         val gymLocation = gymLocations[position]
 
-        localConvertView!!.findViewById<TextView>(R.id.location_name).setText(gymLocation.locationName)
-        localConvertView.findViewById<TextView>(R.id.location_address).setText(gymLocation.locationAddress)
+        view.findViewById<TextView>(R.id.location_name).setText(gymLocation.locationName)
+        view.findViewById<TextView>(R.id.location_address).setText(gymLocation.locationAddress)
 
-        return localConvertView
+        return view
     }
 
     override fun getItem(position: Int): Any {
